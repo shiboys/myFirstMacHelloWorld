@@ -1,5 +1,7 @@
 package com.swj.ics.jvm;
 
+import java.util.Random;
+
 /**
  * author shiweijie
  * date 2018/5/4 下午5:24
@@ -50,6 +52,11 @@ public class ClassLoader {
 
 class DemoObj {
     public static int salary = 10000;
+    //static final类型的在主动访问的时候，是不会初始化静态类。引用常量不会被初始化，因为常量在编译的时候就放入常量池了
+
+    public static final int salaryB = 20000;
+    //这个调用的话，类会被初始化。
+    public static final int x = new Random().nextInt(100);
 
     static {
         System.out.println("obj 被初始化。。。");
@@ -65,3 +72,49 @@ class Child extends DemoObj {
 interface I {
     int a = 10;
 }
+
+/**
+ * 验证：验证的主要目的是确保class文件中的字节流包含的信息符合虚拟机的要求，并且不会损害到jvm自身的安全。
+ *
+ * 文件格式验证：
+ * 1、魔术因子是否正确。0xCAFEBABE
+ * 2、主从版本号是否符合当前虚拟机。
+ * 3、常量池中的常量是不是不支持。
+ * 4、etc...
+ * 元数据的验证：
+ * 1、是否有父类
+ * 2、父类是否允许被继承
+ * 3、是否实现了抽象方法
+ * 4、是否覆盖了父类的final字段
+ * 5、其他的语义检查。
+ * 字节码验证：
+ * 主要进行数据流和控制流的验证，不会出现这样的情况：在堆栈中存放了一个int类型的，但是却给了一个long型的数据
+ * 符号引用验证：
+ *  调用一个不存在的方法，字段等。符号引用验证的目的是为了确保解析动作正常执行，如果无法通过符号引用验证，就会抛出一个异常。
+ *  诸如：noSuchMethodException,nuSuchFieldException
+ */
+
+/**
+ * 准备：
+ * 就是为类的变量分配初始值。
+ */
+/**
+ * 解析：
+ * 类或者接口的解析
+ * 字段的解析
+ * 类方法的解析
+ * 接口方法的解析
+ *
+ */
+/**
+ * 初始化：
+ * 类加载的最后一步
+ * 初始化是执行构造函数<clinit>()方法的过程。
+ * <clinit>()方法是由编译器自动收集类中的所有变量赋值动作和静态语句块中的 语句合并产生的。
+ * 静态语句块只能访问到定义在静态语句块之前的变量，定义在它之后的变量，只能赋值，不能访问。
+ * <clinit>()方法与类的构造函数有点区别，它不需要显式的调用父类的构造函数，虚拟机会保证在子类的<clinit>()执行之前，
+ * 先执行父类的<clinit>()，因此在虚拟机中先被执行的是Object的<clinit>()
+ * 由于父类的<clinit>()方法要先执行，也就意味着父类中定义的静态语句块，要优先于子类。
+ */
+
+
