@@ -77,7 +77,7 @@ public class BinarySearch {
     /**
      * 递归打印 奇妙数字1
      */
-    static void printRecrsiveDemo() {
+    static void printRecursiveDemo() {
         int[] arr = new int[10];
         for(int i = 0; i < 10; i++) {
             arr[i] = 9 - i;
@@ -141,12 +141,12 @@ public class BinarySearch {
         int pos = binarySearchRecv(arr,key);
         System.out.println(" key = " + key +",pos is " + pos);*/
 
-       // printRecrsiveDemo();
+        printRecursiveDemo();
 
         //System.out.println(exR1(6));
         // 0 1 1 2 3 5 8 13
         //System.out.println(fibLoop(8));
-        System.out.println(mystery("hello,swj"));
+       // System.out.println(mystery("hello,swj"));
     }
 
 }
