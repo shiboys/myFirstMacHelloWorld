@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/myFirstMacHelloWorld.iml" filepath="$PROJECT_DIR$/myFirstMacHelloWorld.iml" />
-      <module fileurl="file://$PROJECT_DIR$/myFirstMacHelloWorld1.iml" filepath="$PROJECT_DIR$/myFirstMacHelloWorld1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myFirstHelloWorld.iml" filepath="$PROJECT_DIR$/myFirstHelloWorld.iml" />
     </modules>
   </component>
 </project>

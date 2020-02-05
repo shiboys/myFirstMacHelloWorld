@@ -16,13 +16,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="myFirstMacHelloWorld" />
+        <module name="myFirstHelloWorld" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="JavaHello" target="1.5" />
-      <module name="myFirstMacHelloWorld" target="1.5" />
-      <module name="src" target="1.5" />
+      <module name="myFirstHelloWorld" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
