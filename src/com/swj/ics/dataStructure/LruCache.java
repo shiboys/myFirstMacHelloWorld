@@ -41,19 +41,21 @@ public class LruCache {
         }
 
         Thread.sleep(5 * 1000);
-        log.info("线程休眠5s之后,队列大小为{},重新向队列装入数据",QUEUE.size());
+        
         if(QUEUE.size() < 1) {
             flag =false;
         }
+        log.info("线程休眠5s之后,队列大小为{},重新向队列装入数据",QUEUE.size());
         for (int i = 11; i <= 20; i++) {
             QUEUE.offer(new Node(null, null, i, i));
         }
         Thread.sleep(5 * 1000);
-        log.info("线程休眠10s之后,队列大小为{},checkThread's alive {}",QUEUE.size(),
-                checkTimeoutPool.isTerminated());
+        log.info("线程休眠10s之后,队列大小为{}",QUEUE.size());
         if(QUEUE.size() > 0) {
             flag =true;
         }
+        
+        checkTimeoutPool.execute(new CheckTimeThread());
         Thread.sleep(5 * 1000);
         log.info("线程休眠共15s之后,队列大小为{}，checkThread's alive {}",QUEUE.size(),checkTimeoutPool.isTerminated());
     }
