@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <Property name="LOG_BASE_DIR">/opt/logs/unifieduser/</Property>
+    </Properties>
+    <Appenders>
+        <!--  输出控制台的配置 -->
+        <Console name="console" target="SYSTEM_OUT">
+            <!--  控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
+            <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!--  这个都知道是输出日志的格式 -->
+            <PatternLayout charset="UTF-8"
+                           pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file:%line] -%msg%n"/>
+        </Console>
+        <!--通用-->
+        <RollingFile name="error" fileName="${LOG_BASE_DIR}/error.log"
+                     filePattern="${LOG_BASE_DIR}/error-%d{yyyy-MM-dd}-%i.log">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout charset="UTF-8"
+                           pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file:%line] -%msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="300MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+        <RollingFile name="warn" fileName="${LOG_BASE_DIR}/warn.log"
+                     filePattern="${LOG_BASE_DIR}/warn-%d{yyyy-MM-dd}-%i.log">
+            <Filters>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout charset="UTF-8"
+                           pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file:%line] -%msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="300MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+        <RollingFile name="info" fileName="${LOG_BASE_DIR}/info.log"
+                     filePattern="${LOG_BASE_DIR}/info-%d{yyyy-MM-dd}-%i.log">
+            <Filters>
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout charset="UTF-8"
+                           pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file:%line] -%msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="300MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+        <RollingFile name="debug" fileName="${LOG_BASE_DIR}/debug.log"
+                     filePattern="${LOG_BASE_DIR}/debug-%d{yyyy-MM-dd}-%i.log">
+            <Filters>
+                <ThresholdFilter level="info" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout charset="UTF-8"
+                           pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file:%line] -%msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="300MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+
+
+        <!--配置自定义日志，按天输出-->
+        <RollingFile name="controllerLog" fileName="${LOG_BASE_DIR}/controller.log"
+                     filePattern="${LOG_BASE_DIR}/controller-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout charset="UTF-8"
+                           pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file:%line] -%msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="300MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+
+        <!--配置自定义日志，按天输出-->
+        <RollingFile name="serviceLog" fileName="${LOG_BASE_DIR}/serviceLog.log"
+                     filePattern="${LOG_BASE_DIR}/serviceLog-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout charset="UTF-8"
+                           pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file:%line] -%msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="300MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+        <CatLog4j2 name="CatAppender"/>
+        <!--<Scribe2LogStash name="Scribe2LogStashAppender"/>-->
+    </Appenders>
+
+    <!-- 然后定义logger，只有定义了logger并引入的appender，appender才会生效 -->
+    <loggers>
+        <!--过滤掉spring和mybatis的一些无用的DEBUG信息-->
+        <logger name="org.springframework" level="ERROR"></logger>
+        <logger name="org.mybatis" level="ERROR"></logger>
+        <logger name="cn.allinmd.common.infrastructure.executor.threadpool.ThreadPoolManager" level="ERROR"></logger>
+        <logger name="cn.allinmd.common.mole" level="ERROR"></logger>
+        <logger name="com.xxl.job.core.thread.JobThread" level="ERROR"></logger>
+        <logger name="org.apache.http" level="ERROR"></logger>
+        <logger name="org.hibernate" level="ERROR"></logger>
+        <logger name="springfox.documentation" level="ERROR"></logger>
+        <logger name="io.netty" level="ERROR"></logger>
+
+        <root level="info">
+            <appender-ref ref="console"/>
+            <appender-ref ref="error"/>
+            <appender-ref ref="warn"/>
+            <appender-ref ref="info"/>
+            <appender-ref ref="CatAppender"/>
+        </root>
+
+
+    </loggers>
+</Configuration>
