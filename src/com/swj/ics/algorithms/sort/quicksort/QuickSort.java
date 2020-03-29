@@ -35,8 +35,6 @@ public class QuickSort {
         }
         System.out.println();
 
-
-
     }
 
     static void quickSort(int[] arr) {

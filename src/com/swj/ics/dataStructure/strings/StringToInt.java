@@ -1,5 +1,12 @@
 package com.swj.ics.dataStructure.strings;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 /**
  * @author shiweijie
  * @date 2020/3/8 上午9:57
@@ -57,6 +64,35 @@ public class StringToInt {
         return negtive ? -1 * result : result;
     }
 
+
+    /**
+     * 打印一个最后数值小于 N 的斐波那契数列 2 1 1 3 1 1 2 5 1 1 2 3 
+     * @param i
+     * @param targetMax
+     * @return
+     */
+    int fib(int i, int targetMax) {
+        if (i <= 1) {
+            System.out.println("1 ");
+            return 1;
+        } else if (i <= 2) {
+            System.out.println("2 ");
+            return 2;
+        }
+        int fib1 = fib(i - 1, targetMax);
+        int fib2 = fib(i - 2, targetMax);
+        if (fib1 > 2 && fib1 < targetMax) {
+            System.out.println(fib1 + " ");
+        } else if (fib2 > 2 && fib2 < targetMax) {
+            System.out.println(fib2 + " ");
+        }
+        if (fib1 + fib2 < targetMax) {
+            return fib1 + fib2;
+        } else {
+            return targetMax;
+        }
+    }
+
     public static void main(String[] args) {
 
         int min_val = Integer.MIN_VALUE / 10;
@@ -80,7 +116,28 @@ public class StringToInt {
         System.out.println("str=" + Integer.MIN_VALUE + ",strToInt =" + instance.stringToInt(String.valueOf(Integer.MIN_VALUE)));
 
         System.out.println("str=" + strFull + ",strToInt =" + instance.stringToInt(strFull));
-        System.out.println("str=" + strFull+"0" + ",strToInt =" + instance.stringToInt(strFull+"0"));
+        System.out.println("str=" + strFull + "0" + ",strToInt =" + instance.stringToInt(strFull + "0"));
+
+        List<Integer> list1 = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+        List<Integer> listUpdate = Arrays.asList(list1.get(0), list1.get(1));
+        List<Integer> listDelete = Arrays.asList(list1.get(2), list1.get(3));
+
+        list1.removeAll(listDelete);
+        list1.removeAll(listUpdate);
+        System.out.println(list1);
+        System.out.println(listUpdate);
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String input = "2099-12-31 00:00:00";
+        try {
+            Date date = sdf.parse(input);
+            System.out.println(date);
+            String result = sdf.format(date);
+            System.out.println(result);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
     }
 }
