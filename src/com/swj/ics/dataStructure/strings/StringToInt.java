@@ -47,6 +47,7 @@ public class StringToInt {
         while (i < length) {
             //非数字的字符，返回-1
             int digit = Character.digit(s.charAt(i), radis);
+            //int digit2 = (int)(str.charAt(i) - '0');
             if (digit < 0) {
                 throw new RuntimeException("invalid digital string : " + str);
             }

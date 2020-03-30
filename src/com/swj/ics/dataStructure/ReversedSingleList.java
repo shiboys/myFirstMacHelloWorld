@@ -5,6 +5,12 @@ package com.swj.ics.dataStructure;
  * @date 2020/2/3 下午6:12
  */
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+import org.omg.PortableInterceptor.INACTIVE;
+
 /**
  * 单链表的反转。
  */
@@ -45,6 +51,25 @@ public class ReversedSingleList {
 
     }
 
+    /**
+     * 如果只是打印翻转的链表，而非真正的翻转，则借助于栈就能实现
+     */
+    public static ArrayList getReversedSingleLinkedListData(Node headNode) {
+        Node node = headNode.next;
+        Stack<Integer> nodeStack = new Stack<>();
+        int count = 0;
+        while (node != null) {
+            nodeStack.push(node.data);
+            count++;
+            node = node.next;
+        }
+        ArrayList<Integer> list = new ArrayList<>();
+        for(int i=0;i<count && !nodeStack.isEmpty();i++) {
+            list.add(nodeStack.pop());
+        }
+        return list;
+    }
+
     public static class Node {
         private int data;
         private Node next;
@@ -63,14 +88,16 @@ public class ReversedSingleList {
             currentNode = node;
         }
 
-        System.out.println("before reverse");
-        Node temp = headNode.next;
-        while (temp != null) {
-            System.out.print(temp.data + "\t");
-            temp = temp.next;
-        }
-        System.out.println("\n after reverse");
-        reverse(headNode);
+//        System.out.println("before reverse");
+//        Node temp = headNode.next;
+//        while (temp != null) {
+//            System.out.print(temp.data + "\t");
+//            temp = temp.next;
+//        }
+//        System.out.println("\n after reverse");
+//        reverse(headNode);
 
+         List list = getReversedSingleLinkedListData(headNode);
+        System.out.println(list);
     }
 }
