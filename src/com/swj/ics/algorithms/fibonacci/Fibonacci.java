@@ -1,6 +1,4 @@
-package com.swj.ics.algorithms.fib;
-
-import org.apache.logging.log4j.core.util.JsonUtils;
+package com.swj.ics.algorithms.fibonacci;
 
 /**
  * @author shiweijie
