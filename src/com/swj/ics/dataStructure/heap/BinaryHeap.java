@@ -67,7 +67,7 @@ public class BinaryHeap<Key extends Comparable<Key>> implements Iterable<Key> {
         //while (k <= n/2) {
         while (left(k) <= size) {
             int child = left(k);
-            int rightChild = child + 1;
+            int rightChild = right(k);
             // 我这里只判断less(child, rightChild) 的话 不严谨 if (less(child, rightChild)) {
             if (rightChild <= size && less(child, rightChild))
                 child = rightChild;
@@ -90,7 +90,7 @@ public class BinaryHeap<Key extends Comparable<Key>> implements Iterable<Key> {
         pqArray = newArray;
     }
 
-    void insert(Key key) {
+    public void insert(Key key) {
         if (size >= n - 1) {
             resize(size << 1);
         }
@@ -104,7 +104,7 @@ public class BinaryHeap<Key extends Comparable<Key>> implements Iterable<Key> {
         swim(size);
     }
 
-    Key delMax() {
+    public Key delMax() {
         //最大堆顶的元素就是最大元素
         Key max = pqArray[1];
         // 把这个最大元素换到最后，删除之
@@ -113,10 +113,14 @@ public class BinaryHeap<Key extends Comparable<Key>> implements Iterable<Key> {
         size--;
         // 让 paArray[1] 下沉到相应的位置
         sink(1);
-        if (size > 0 && size <= (pqArray.length - 1) / 4) {
-            resize((pqArray.length - 1) / 2);
+        if (size > 0 && size == (pqArray.length - 1) / 4) {
+            resize(pqArray.length / 2);
         }
         return max;
+    }
+
+    public Key getMax() {
+        return pqArray[1];
     }
 
     public int getSize() {
