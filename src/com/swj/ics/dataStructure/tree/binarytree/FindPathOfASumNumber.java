@@ -75,6 +75,8 @@ public class FindPathOfASumNumber {
       }
     }
     // 把当前节点从栈中弹出，表示当前节点已经不是当前路径的一部分了。
+    // 这里并没有按照原理解说的将 currSum -= node.value ,这是因为 curSum 是形参，在递归的环境中，下一次递归，
+    // curSum 会自动变为它所在那次递归的真实值，不需要 -=，而是递归调用帮我们做了减法。
     nodeStack.pop();
   }
 

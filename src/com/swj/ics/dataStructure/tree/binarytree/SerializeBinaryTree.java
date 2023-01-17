@@ -29,6 +29,11 @@ import java.util.stream.Collectors;
  */
 public class SerializeBinaryTree {
 
+  /**
+   * 使用中序遍历法，将包含 Null 节点的值 存入 list
+   * @param root 根节点
+   * @param nodeValueList 目标值 list
+   */
   static void serializeBinaryTreeToString(BinaryTreeNode root, List<Integer> nodeValueList) {
     BinaryTreeNode pNode = root;
 
@@ -59,6 +64,7 @@ public class SerializeBinaryTree {
     if (splitArr.length < 1) {
       throw new IllegalArgumentException("deserialized binary tree value is illegal.");
     }
+    // 使用一个 cursor 来表示当前读取到反序列化数组的位置
     Cursor cursor = new Cursor();
     Integer rootValue = getIntegerValue(splitArr, 0);
     if (rootValue == null) {
@@ -82,6 +88,7 @@ public class SerializeBinaryTree {
     BinaryTreeNode pNode = null;
     Integer val = getIntegerValue(desValArr, curIndex);
 
+    // 这段代码也玄之又玄，也是按照前序递归遍历的方式实现反序列化。
     if (val != null) {
       pNode = new BinaryTreeNode(val);
       pNode.leftChild = doRebuildTree(desValArr, cursor);
