@@ -1,7 +1,5 @@
 package com.swj.ics.dataStructure.tree;
 
-import org.omg.CORBA.PRIVATE_MEMBER;
-
 /**
  * @author shiweijie
  * @date 2020/3/24 下午9:02
@@ -89,11 +87,9 @@ public class RedBlackTree<K extends Comparable<K>, V> {
         }
     }
 
+    // null 节点也被认为是黑色的
     private boolean isBlack(RBNode node) {
-        if (node != null) {
-            return node.color == BLACK;
-        }
-        return false;
+        return node == null || node.color == BLACK;
     }
 
     /**
@@ -128,19 +124,19 @@ public class RedBlackTree<K extends Comparable<K>, V> {
     /**
      * 左旋
      * 左旋示意图
-     * p               p
-     * |               |
-     * x               y
+     * p                p
+     * |                |
+     * x                y
      * / \    ----->   / \
-     * lx   y           x  ry
-     * /  \         / \
+     * lx  y         x  ry
+     *   /  \        / \
      * ly  ry       lx  ly
      * <p>
-     * 1、将y的左子节点ly的父节点更新为x，并将x的右子节点指向y的左子节点ly
-     * 2、当x的父节点不为空时，更新y的父节点为x的父节点，并将x的父节点的指定子树(本例为x)指定为y
-     * 3、x如何下来？x的父节点更新为y，将y的左子节点更新为x
+     * 1、将y的左子节点ly的父节点更新为x，并将x的右子节点指向y的左子节点ly。x.right = y.left
+     * 2、x如何下来？x的父节点更新为y，将y的左子节点更新为x。 y.left = x;
+     * 3、当x的父节点不为空时，更新y的父节点为x的父节点，并将x的父节点的指定子树(本例为x)指定为y。
      *
-     * @param x
+     * @param x 节点
      */
     private void rotateLeft(RBNode x) {
         //1、将y的左子节点ly的父节点更新为x，并将x的右子节点指向y的左子节点ly
@@ -152,14 +148,15 @@ public class RedBlackTree<K extends Comparable<K>, V> {
         }
         //当x的父节点不为空时，更新y的父节点为x的父节点，并将x的父节点的指定子树(本例为x)指定为y
         if (x.parent != null) {
-            y.parent = x.parent;
+            RBNode parent = x.parent;
+            y.parent = parent;
             //将x的父节点的指定子树(本例为x)指定为y
-            if (x.parent.left == x) {
-                x.parent.left = y;
+            if (parent.left == x) {
+                parent.left = y;
             } else {
-                x.parent.right = y;
+                parent.right = y;
             }
-        } else { //这说明X为根节点，此时需要更新y为根节点。
+        } else { //这说明原来 x 为根节点，此时需要更新y为根节点。
             this.root = y;
             this.root.parent = null;
         }
@@ -179,7 +176,7 @@ public class RedBlackTree<K extends Comparable<K>, V> {
      * / \                 / \
      * lx  ly              ly  ry
      * <p>
-     * 1、 将x的左子节点ly的父节点更新为y节点，将y的左子节点更新为x的左子节点ly
+     * 1、 将x的右子节点ly的父节点更新为y节点，将y的左子节点更新为x的左子节点ly
      * 2、当y的父节点不为空时，更新x的父节点为y的父节点，更新y的父节点的指定子节点(y当前的位置)为x
      * 3、更新X与y的关系。更新y的父节点为x，更新x的右子节点为y
      */
@@ -193,13 +190,14 @@ public class RedBlackTree<K extends Comparable<K>, V> {
         }
         //2、当y的父节点不为空时，更新x的父节点为y的父节点，更新y的父节点的指定子节点(y当前的位置)为x
         if (y.parent != null) {
-            x.parent = y.parent;
-            if (y.parent.left == y) {
-                y.parent.left = x;
+            RBNode p = y.parent;
+            x.parent = p;
+            if (p.left == y) {
+                p.left = x;
             } else {
-                y.parent.right = x;
+                p.right = x;
             }
-        } else {//y为根节点
+        } else {//y为根节点,需要更新为 x
             this.root = x;
             this.root.parent = null;
         }
@@ -236,7 +234,7 @@ public class RedBlackTree<K extends Comparable<K>, V> {
                 curr = curr.right;
             } else if (cmp == 0) {
                 curr.setValue(node.value);
-                //这里一定要记得返回，因为找到了节点，不需要再遍历了
+                //这里一定要记得返回，因为找到了节点，不需要再进行旋转和平衡了。
                 return;
             } else {
                 curr = curr.left;
@@ -267,7 +265,7 @@ public class RedBlackTree<K extends Comparable<K>, V> {
      *      |--情景2：插入节点的key已经存在。不需要处理。
      *      |--情景3：插入的节点的父节点为黑色。因为所插入的路径，黑色节点没有发生变化，所以红黑树依然平衡，所以不需要处理。
      *
-     *      |--情景4：需要处理的，插入的节点的父节点为红色
+     *      |--情景4：需要处理的，插入的节点的父节点为红色。
      *          |--情景4.1：叔叔节点存在，且叔叔节点为红色(父-叔为双红)。将父节点和叔叔节点染色为黑色，将祖父节点染色为红色，并以祖父节点为当前节点，进行下一轮处理
      *          |--情景4.2：叔叔节点不存在或者为黑色，父亲节点为爷爷节点的左子树。
      *              |--4.2.1 插入节点为父亲节点的左子节点，(LL情况，双红），将父节点染色为黑色，将爷爷染色为红色，然后以祖父节点为支点进行右旋
@@ -278,16 +276,16 @@ public class RedBlackTree<K extends Comparable<K>, V> {
      *
      */
     private void insertFixup(RBNode node) {
-        this.root.setColor(RED);
+        this.root.setColor(BLACK);
         RBNode parent = node.getParent();
         RBNode gParent = parent.getParent();//祖父节点
         //进入情景4
-        if(parent != null && isRed(parent)) {
+        if(isRed(parent)) {
             //parent 是红色节点，则一定存在祖父节点，因为根节点不是红色
             RBNode uncle = null;
             if(parent == gParent.left) {
                 uncle = gParent.right;
-                if(uncle != null && isRed(uncle)) {
+                if(isRed(uncle)) {
                     //情景4.1 ，重新染色并重新旋转
                     setBlack(parent);
                     setBlack(uncle);
@@ -297,7 +295,7 @@ public class RedBlackTree<K extends Comparable<K>, V> {
                     return;
                 }
                 //4.2 叔叔节点不存在或者为黑色
-                if(uncle == null || isBlack(uncle)) {
+                if(isBlack(uncle)) {
                     //叔叔节点不存在或者为黑色
                     //4.2.1 插入节点为父亲节点的左子节点，(LL情况，双红）
                     if(node == parent.left) {
@@ -310,14 +308,13 @@ public class RedBlackTree<K extends Comparable<K>, V> {
                     if(node == parent.right) {
                         rotateLeft(parent);
                         insertFixup(parent);
-                        return;
                     }
 
                 }
             } else {
                 //父节点为祖父节点的右子树
                 uncle = gParent.left;
-                if(uncle != null && isRed(uncle)) {
+                if(isRed(uncle)) {
                     //情景4.1 ，重新染色并重新旋转
                     setBlack(parent);
                     setBlack(uncle);
@@ -327,7 +324,7 @@ public class RedBlackTree<K extends Comparable<K>, V> {
                     return;
                 }
                 //4.3情况，
-                if(uncle == null || isBlack(uncle)) {
+                if(isBlack(uncle)) {
                    if(node == parent.right) {
                        //4.3.1：插入节点为父亲节点的右子树(RR双红情况）
                        //将父节点染色为黑色，将祖父节点染色为红色，以祖父节点为支点进行左旋
@@ -341,7 +338,6 @@ public class RedBlackTree<K extends Comparable<K>, V> {
                        rotateRight(parent);
                        //此时parent节点转到最右子树子节点上，可认为是RR的新增节点
                        insertFixup(parent);
-                       return;
                    }
                 }
 
