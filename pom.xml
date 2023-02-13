@@ -33,7 +33,11 @@
             <artifactId>lombok</artifactId>
             <version>1.18.8</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.roaringbitmap</groupId>
+            <artifactId>RoaringBitmap</artifactId>
+            <version>0.9.25</version>
+        </dependency>
 
     </dependencies>
 

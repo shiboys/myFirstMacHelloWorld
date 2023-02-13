@@ -23,5 +23,7 @@
     <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.7.24" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:jul-to-slf4j:1.7.24" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.8" level="project" />
+    <orderEntry type="library" name="Maven: org.roaringbitmap:RoaringBitmap:0.9.25" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.roaringbitmap:shims:0.9.25" level="project" />
   </component>
 </module>
