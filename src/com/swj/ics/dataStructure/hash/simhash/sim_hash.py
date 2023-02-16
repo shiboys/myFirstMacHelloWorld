@@ -47,6 +47,7 @@ class Simhash:
         # 这里的 extract_tags 调用了 jieba 的 tfidf.py 里面的 一个源码
         # 将 tags = sorted(freq.items(), key=itemgetter(1), reverse=True) 改为 tags = sorted(freq.items(), key=itemgetter(1,0), reverse=True)
         # 这样改的目的是先按照权重排序，再按照词排序
+        #1、获取分词和权重，使用 jieba.analyse.extract_tags() 函数
         keyword_list = jieba.analyse.extract_tags(
             '|'.join(segment_list), topK=20, withWeight=True, allowPOS=())
         key_list = []
@@ -54,7 +55,9 @@ class Simhash:
             weight = int(weight * 20)
             print(keyword, weight)
             temp_arr = []
+            #2、hash 计算
             hash = self.string_hash(keyword)
+            #3、加权
             for ch in hash:
                 if ch == "1":
                     temp_arr.append(weight)
@@ -63,12 +66,16 @@ class Simhash:
 
             key_list.append(temp_arr)
         # axis 数组的层级，axis=0，表示a[0],a[1],a[2], axis=1 表示 a[0][0],a[0][1],a[0][2]
-        key_list = np.sum(np.array(key_list), axis=1)
+        # 这里如果 axis=1 是错误的，只能取到有跟列数 m 一样的集合大小，
+        # 而整整的 simHash 是需要 m 个权重相加得到一个权重，最终是 64 个权重数据的集合，这样才能降维成 64 位 0 和 1 bit数据
+        # 4，合并
+        key_list = np.sum(np.array(key_list), axis=0)
         print("final key list after sum are ", key_list)
         if key_list == []:
             # 读取数据异常
             return '00'
         simhash_str = ""
+        # 5、降维
         for num in key_list:
             if num > 0:
                 simhash_str = simhash_str+'1'
