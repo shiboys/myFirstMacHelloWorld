@@ -21,7 +21,7 @@ public class Queue<T> implements Iterable<T> {
   Node<T> first, last;
   private int size;
 
-  boolean isEmpty() {
+  public boolean isEmpty() {
     return first == null;
   }
 

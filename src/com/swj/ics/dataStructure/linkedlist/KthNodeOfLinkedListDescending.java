@@ -20,43 +20,43 @@ package com.swj.ics.dataStructure.linkedlist;
  */
 public class KthNodeOfLinkedListDescending {
 
-    static LinkNode findKthNodeFromTail(LinkNode head, int k) {
-        /**
-         * 该方法的鲁棒性注意点：
-         * 1、输入的 head 为空指针，如果不加判断，代码会访问空指针指向的内存区域，会导致程序崩溃
-         * 2、输入的以 head 为头结点的链表节点的节点数少于 k。由于在 for 循环中会走 k-1 步，仍然会由于空指针而造成程序崩溃
-         * 3、输入的参数 k 为0。如果 k 是个无符号的整数，那么在 for 循环中，k-1得到的不是 -1 而是 OXFFFFFFFF。因此 for 循环的次数可能会远超出我们的想象。
-         */
-        if (head == null || k < 0) {
-            return null;
-        }
-        LinkNode pNode = head;
-        LinkNode p2Node;
-        for (int i = 0; i < k - 1; i++) {
-            if (pNode.next == null) {
-                return null;
-            }
-            pNode = pNode.next;
-        }
-
-        p2Node = head;
-        while (pNode.next != null) { // 这里一定要注意，此时 pNode 和 p2Node 已经开始步调一致，应该是一直走到链表的最后一个节点，
-            // 此时 p2Node 刚好是 倒数第 k个元素
-            pNode = pNode.next;
-            p2Node = p2Node.next;
-        }
-        return p2Node;
+  static LinkNode findKthNodeFromTail(LinkNode head, int k) {
+    /**
+     * 该方法的鲁棒性注意点：
+     * 1、输入的 head 为空指针，如果不加判断，代码会访问空指针指向的内存区域，会导致程序崩溃
+     * 2、输入的以 head 为头结点的链表节点的节点数少于 k。由于在 for 循环中会走 k-1 步，仍然会由于空指针而造成程序崩溃
+     * 3、输入的参数 k 为0。如果 k 是个无符号的整数，那么在 for 循环中，k-1得到的不是 -1 而是 OXFFFFFFFF。因此 for 循环的次数可能会远超出我们的想象。
+     */
+    if (head == null || k < 0) {
+      return null;
+    }
+    LinkNode pNode = head;
+    LinkNode p2Node;
+    for (int i = 0; i < k - 1; i++) {
+      if (pNode.next == null) {
+        return null;
+      }
+      pNode = pNode.next;
     }
 
-    public static void main(String[] args) {
-        int[] arr = {1, 2, 3, 4, 5, 6};
-        LinkNode headNode = LinkNode.getLinkedListByArray(arr);
-        int k = 3;
-        LinkNode targetNode = findKthNodeFromTail(headNode, k);
-        if (targetNode != null) {
-            System.out.println(targetNode);
-        } else {
-            System.out.println(String.format("can not find the target k node. [k=%s]", k));
-        }
+    p2Node = head;
+    while (pNode.next != null) { // 这里一定要注意，此时 pNode 和 p2Node 已经开始步调一致，应该是一直走到链表的最后一个节点，
+      // 此时 p2Node 刚好是 倒数第 k个元素
+      pNode = pNode.next;
+      p2Node = p2Node.next;
     }
+    return p2Node;
+  }
+
+  public static void main(String[] args) {
+    int[] arr = {1, 2, 3, 4, 5, 6};
+    LinkNode headNode = LinkNode.getLinkedListByArray(arr);
+    int k = 3;
+    LinkNode targetNode = findKthNodeFromTail(headNode, k);
+    if (targetNode != null) {
+      System.out.println(targetNode);
+    } else {
+      System.out.println(String.format("can not find the target k node. [k=%s]", k));
+    }
+  }
 }

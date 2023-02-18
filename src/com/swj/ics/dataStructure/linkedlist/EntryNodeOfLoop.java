@@ -21,88 +21,88 @@ package com.swj.ics.dataStructure.linkedlist;
  */
 public class EntryNodeOfLoop {
 
-    static LinkNode getMeetingNode(LinkNode head) {
-        if (head == null) {
-            return null;
-        }
-        LinkNode pSlow = head.next;
-        if (pSlow == null) {
-            return null;
-        }
-        LinkNode pFast = pSlow.next;
-        while (pFast != null && pSlow != null) {
-            if (pFast == pSlow) {
-                return pFast;
-            }
-            pSlow = pSlow.next;
+  static LinkNode getMeetingNode(LinkNode head) {
+    if (head == null) {
+      return null;
+    }
+    LinkNode pSlow = head.next;
+    if (pSlow == null) {
+      return null;
+    }
+    LinkNode pFast = pSlow.next;
+    while (pFast != null && pSlow != null) {
+      if (pFast == pSlow) {
+        return pFast;
+      }
+      pSlow = pSlow.next;
 
-            pFast = pFast.next;
-            if (pFast != null) {
-                pFast = pFast.next;
-            }
-        }
+      pFast = pFast.next;
+      if (pFast != null) {
+        pFast = pFast.next;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * 在找到环中任意一个节点之后，就能得出环中的节点数目，并找出环的入口节点。
+   */
+  static LinkNode findEntryNodeOfLoop(LinkNode head) {
+    LinkNode jointNode = getMeetingNode(head);
+    // 如果根本没有环形，则返回
+    if (jointNode == null) {
+      System.out.println("current linked list is not a loop list");
+      return null;
+    }
+    LinkNode pNode = jointNode;
+    int count = 1;
+    while (pNode.next != jointNode) {
+      pNode = pNode.next;
+      count++;
+    }
+    // 此时环形链表的节点数量为 count 个
+    // 先让 p1 节点走 count 步
+    LinkNode p1Node = head;
+
+    for (int i = 0; i < count; i++) {
+      if (p1Node != null) {
+        p1Node = p1Node.next;
+      } else {
         return null;
+      }
     }
-
-    /**
-     * 在找到环中任意一个节点之后，就能得出环中的节点数目，并找出环的入口节点。
-     */
-    static LinkNode findEntryNodeOfLoop(LinkNode head) {
-        LinkNode jointNode = getMeetingNode(head);
-        // 如果根本没有环形，则返回
-        if (jointNode == null) {
-            System.out.println("current linked list is not a loop list");
-            return null;
-        }
-        LinkNode pNode = jointNode;
-        int count = 1;
-        while (pNode.next != jointNode) {
-            pNode = pNode.next;
-            count++;
-        }
-        // 此时环形链表的节点数量为 count 个
-        // 先让 p1 节点走 count 步
-        LinkNode p1Node = head;
-
-        for (int i = 0; i < count; i++) {
-            if (p1Node != null) {
-                p1Node = p1Node.next;
-            } else {
-                return null;
-            }
-        }
-        LinkNode p2Node = head;
-        while (p1Node != p2Node) {
-            p1Node = p1Node.next;
-            p2Node = p2Node.next;
-        }
-        return p2Node;
+    LinkNode p2Node = head;
+    while (p1Node != p2Node) {
+      p1Node = p1Node.next;
+      p2Node = p2Node.next;
     }
+    return p2Node;
+  }
 
-    public static void main(String[] args) {
-        int[] arr = {1, 2, 3, 4, 5, 6};
-        int entryNodeVal = 3;
-        LinkNode pHead = null;
-        LinkNode pNode = null;
-        LinkNode entryNode = null;
-        for (int i = 0; i < arr.length; i++) {
-            if (i == 0) {
-                pHead = pNode = new LinkNode(arr[i], null);
-            } else {
-                LinkNode newNode = new LinkNode(arr[i], null);
-                pNode.next = newNode;
-                pNode = newNode;
-            }
-            if (arr[i] == entryNodeVal) {
-                entryNode = pNode;
-            }
-            if (i == arr.length - 1) {
-                pNode.next = entryNode;
-            }
-        }
-        LinkNode findEntrNode = findEntryNodeOfLoop(pHead);
-        if (findEntrNode != null) {
-            System.out.println("find entry node, value is " + findEntrNode.value);
-        }
+  public static void main(String[] args) {
+    int[] arr = {1, 2, 3, 4, 5, 6};
+    int entryNodeVal = 3;
+    LinkNode pHead = null;
+    LinkNode pNode = null;
+    LinkNode entryNode = null;
+    for (int i = 0; i < arr.length; i++) {
+      if (i == 0) {
+        pHead = pNode = new LinkNode(arr[i], null);
+      } else {
+        LinkNode newNode = new LinkNode(arr[i], null);
+        pNode.next = newNode;
+        pNode = newNode;
+      }
+      if (arr[i] == entryNodeVal) {
+        entryNode = pNode;
+      }
+      if (i == arr.length - 1) {
+        pNode.next = entryNode;
+      }
     }
+    LinkNode findEntrNode = findEntryNodeOfLoop(pHead);
+    if (findEntrNode != null) {
+      System.out.println("find entry node, value is " + findEntrNode.value);
+    }
+  }
 }

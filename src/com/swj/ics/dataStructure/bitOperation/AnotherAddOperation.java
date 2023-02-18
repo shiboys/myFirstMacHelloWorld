@@ -1,6 +1,4 @@
-package com.swj.ics.dataStructure.bit;
-
-import org.apache.logging.log4j.core.util.JsonUtils;
+package com.swj.ics.dataStructure.bitOperation;
 
 /**
  * @author shiweijie

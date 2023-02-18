@@ -19,35 +19,35 @@ package com.swj.ics.dataStructure.linkedlist;
  * 我们继续合并两个链表剩下的节点。此时链表 2 的头结点的值小于链表 1 ，因此链表2 的头结点将会是合并的链表的下一个节点
  */
 public class Combine2SortedLinkedList {
-    static LinkNode getMerged2SortedLinkedList(LinkNode p1Head, LinkNode p2Head) {
-        if (p1Head == null) {
-            return p2Head;
-        }
-        if (p2Head == null) {
-            return p1Head;
-        }
-        LinkNode mergedHead;
-        if (p1Head.value < p2Head.value) {
-            mergedHead = p1Head;
-            mergedHead.next = getMerged2SortedLinkedList(p1Head.next, p2Head);
-        } else {
-            mergedHead = p2Head;
-            mergedHead.next = getMerged2SortedLinkedList(p1Head, p2Head.next);
-        }
-        return mergedHead;
+  static LinkNode getMerged2SortedLinkedList(LinkNode p1Head, LinkNode p2Head) {
+    if (p1Head == null) {
+      return p2Head;
     }
-
-    public static void main(String[] args) {
-        int[] arr1 = {1, 3, 5, 7};
-        int[] arr2 = {2, 4, 6, 8};
-
-        LinkNode pHead1 = LinkNode.getLinkedListByArray(arr1);
-        LinkNode pHead2 = LinkNode.getLinkedListByArray(arr2);
-        LinkNode mergedHead2 = getMerged2SortedLinkedList(pHead1, pHead2);
-        if (mergedHead2 != null) {
-            LinkNode.printThisList(mergedHead2);
-        } else {
-            System.out.println("merged head is null");
-        }
+    if (p2Head == null) {
+      return p1Head;
     }
+    LinkNode mergedHead;
+    if (p1Head.value < p2Head.value) {
+      mergedHead = p1Head;
+      mergedHead.next = getMerged2SortedLinkedList(p1Head.next, p2Head);
+    } else {
+      mergedHead = p2Head;
+      mergedHead.next = getMerged2SortedLinkedList(p1Head, p2Head.next);
+    }
+    return mergedHead;
+  }
+
+  public static void main(String[] args) {
+    int[] arr1 = {1, 3, 5, 7};
+    int[] arr2 = {2, 4, 6, 8};
+
+    LinkNode pHead1 = LinkNode.getLinkedListByArray(arr1);
+    LinkNode pHead2 = LinkNode.getLinkedListByArray(arr2);
+    LinkNode mergedHead2 = getMerged2SortedLinkedList(pHead1, pHead2);
+    if (mergedHead2 != null) {
+      LinkNode.printThisList(mergedHead2);
+    } else {
+      System.out.println("merged head is null");
+    }
+  }
 }

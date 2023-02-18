@@ -17,57 +17,58 @@ package com.swj.ics.dataStructure.linkedlist;
  * 同时我们还需要事先保存 i 节点之前的 next 节点 j，以防止链表断开。因此我们需要定义 3 个节点指针。
  */
 public class ReverseLinkedList {
-    static LinkNode reverseLinkedList(LinkNode head) {
-        if (head == null) {
-            return null;
-        }
-        LinkNode pNode = head;
-        LinkNode prevNode = null;
-        LinkNode nextNode;
-        LinkNode reversedHead = null;
-        while (pNode != null) {
-            nextNode = pNode.next;
-            pNode.next = prevNode;
-            prevNode = pNode;
-            if (nextNode == null) {
-                reversedHead = pNode;
-            }
-            pNode = nextNode;
-        }
-        return reversedHead;
+  static LinkNode reverseLinkedList(LinkNode head) {
+    if (head == null) {
+      return null;
     }
-
-    /**
-     * 使用递归的方式来翻转链表
-     * @param head 链表头部
-     * @return 翻转之后的链表徒步
-     */
-    static LinkNode reverseLinkedListRecursively(LinkNode head) {
-        if (head == null) {
-            return null;
-        }
-        LinkNode pNode = head;
-        LinkNode nextNode = pNode.next;
-        LinkNode reversedHead = null;
-        if (nextNode != null && nextNode.next != null) {
-            reversedHead = reverseLinkedListRecursively(nextNode);
-        } else {
-            reversedHead = pNode.next;
-        }
-        nextNode.next = pNode;
-        pNode.next = null;
-        return reversedHead;
+    LinkNode pNode = head;
+    LinkNode prevNode = null;
+    LinkNode nextNode;
+    LinkNode reversedHead = null;
+    while (pNode != null) {
+      nextNode = pNode.next;
+      pNode.next = prevNode;
+      prevNode = pNode;
+      if (nextNode == null) {
+        reversedHead = pNode;
+      }
+      pNode = nextNode;
     }
+    return reversedHead;
+  }
 
-    //static LinkNode reversedHead;
+  /**
+   * 使用递归的方式来翻转链表
+   *
+   * @param head 链表头部
+   * @return 翻转之后的链表徒步
+   */
+  static LinkNode reverseLinkedListRecursively(LinkNode head) {
+    if (head == null) {
+      return null;
+    }
+    LinkNode pNode = head;
+    LinkNode nextNode = pNode.next;
+    LinkNode reversedHead = null;
+    if (nextNode != null && nextNode.next != null) {
+      reversedHead = reverseLinkedListRecursively(nextNode);
+    } else {
+      reversedHead = pNode.next;
+    }
+    nextNode.next = pNode;
+    pNode.next = null;
+    return reversedHead;
+  }
 
-    public static void main(String[] args) {
-        int[] arr = {1, 2, 3, 4, 5, 6};
-        LinkNode head = LinkNode.getLinkedListByArray(arr);
-        LinkNode.printThisList(head);
+  //static LinkNode reversedHead;
+
+  public static void main(String[] args) {
+    int[] arr = {1, 2, 3, 4, 5, 6};
+    LinkNode head = LinkNode.getLinkedListByArray(arr);
+    LinkNode.printThisList(head);
         /*LinkNode reverseHead = reverseLinkedList(head);
         LinkNode.printThisList(reverseHead);*/
-        LinkNode reversedHead = reverseLinkedListRecursively(head);
-        LinkNode.printThisList(reversedHead);
-    }
+    LinkNode reversedHead = reverseLinkedListRecursively(head);
+    LinkNode.printThisList(reversedHead);
+  }
 }

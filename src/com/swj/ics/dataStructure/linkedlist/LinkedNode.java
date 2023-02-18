@@ -9,6 +9,6 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 public class LinkedNode<T extends Comparable<T>> {
-    public T value;
-    public LinkedNode<String> next;
+  public T value;
+  public LinkedNode<String> next;
 }

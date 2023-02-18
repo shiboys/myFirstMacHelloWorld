@@ -15,55 +15,55 @@ import java.util.Stack;
  * 的值，此时节点的顺序已经反转过来了。
  */
 public class ReversePrintLinkedList {
-    public static void main(String[] args) {
-        int[] arr = {1, 2, 3, 4, 5, 6};
-        LinkNode pHead = null;
-        LinkNode pNode = null, prevNode;
-        for (int i = 0; i < arr.length; i++) {
-            if (i == 0) {
-                pHead = pNode = new LinkNode(arr[i], null);
-            } else {
-                LinkNode newNode = new LinkNode(arr[i], null);
-                pNode.next = newNode;
-                pNode = newNode;
-            }
-        }
-        // printListNodeReversingIteratively(pHead);
-        printListNodeReversingRecursively(pHead);
+  public static void main(String[] args) {
+    int[] arr = {1, 2, 3, 4, 5, 6};
+    LinkNode pHead = null;
+    LinkNode pNode = null, prevNode;
+    for (int i = 0; i < arr.length; i++) {
+      if (i == 0) {
+        pHead = pNode = new LinkNode(arr[i], null);
+      } else {
+        LinkNode newNode = new LinkNode(arr[i], null);
+        pNode.next = newNode;
+        pNode = newNode;
+      }
     }
+    // printListNodeReversingIteratively(pHead);
+    printListNodeReversingRecursively(pHead);
+  }
 
-    static void printListNodeReversingIteratively(LinkNode head) {
-        if (head == null) {
-            return;
-        }
-        LinkNode pNode = head;
-        Stack<LinkNode> nodeStack = new Stack<>();
-        while (pNode != null) {
-            nodeStack.push(pNode);
-            pNode = pNode.next;
-        }
-        while (!nodeStack.isEmpty()) {
-            System.out.print(nodeStack.pop().value + "\t");
-        }
-        System.out.println();
+  static void printListNodeReversingIteratively(LinkNode head) {
+    if (head == null) {
+      return;
     }
-
-    /**
-     * 我们既然想到用栈来实现这个函数，而递归的本质就是一个栈结构，于是很自然的就想到了用递归来实现。要实现反过来输出链表，我们每访问到一个节点
-     * 的时候，先递归输出它后面的接地那，在输出该节点自身，这样就链表的输出结果就反过来了
-     */
-
-    static void printListNodeReversingRecursively(LinkNode node) {
-        if (node == null) {
-            return;
-        }
-        if (node.next != null) {
-            printListNodeReversingRecursively(node.next);
-        }
-        System.out.print(node.value + "\t");
+    LinkNode pNode = head;
+    Stack<LinkNode> nodeStack = new Stack<>();
+    while (pNode != null) {
+      nodeStack.push(pNode);
+      pNode = pNode.next;
     }
-    /**
-     * 上面的基于递归的代码看起来简单，但是有一个问题：当链表非常长的时候，就会导致函数调用的层级很深，从而有可能函数调用栈溢出。
-     * 显然用栈基于循环实现的代码鲁棒性要好一些。
-     */
+    while (!nodeStack.isEmpty()) {
+      System.out.print(nodeStack.pop().value + "\t");
+    }
+    System.out.println();
+  }
+
+  /**
+   * 我们既然想到用栈来实现这个函数，而递归的本质就是一个栈结构，于是很自然的就想到了用递归来实现。要实现反过来输出链表，我们每访问到一个节点
+   * 的时候，先递归输出它后面的接地那，在输出该节点自身，这样就链表的输出结果就反过来了
+   */
+
+  static void printListNodeReversingRecursively(LinkNode node) {
+    if (node == null) {
+      return;
+    }
+    if (node.next != null) {
+      printListNodeReversingRecursively(node.next);
+    }
+    System.out.print(node.value + "\t");
+  }
+  /**
+   * 上面的基于递归的代码看起来简单，但是有一个问题：当链表非常长的时候，就会导致函数调用的层级很深，从而有可能函数调用栈溢出。
+   * 显然用栈基于循环实现的代码鲁棒性要好一些。
+   */
 }
