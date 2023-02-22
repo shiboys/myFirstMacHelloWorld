@@ -69,7 +69,6 @@ public class GraphConnectedComponents {
     GraphConnectedComponents gcc = new GraphConnectedComponents(graph);
     System.out.println("current graph from file " + fileName + " has " + gcc.getComponentCount() + " components。");
     Queue<Integer>[] componentQueues = (Queue<Integer>[]) new Queue[gcc.getComponentCount()];
-    //Arrays.fill(componentQueues, new Queue<Integer>());
     for (int i = 0; i < gcc.componentCount; i++) {
       componentQueues[i] = new Queue<>();
     }

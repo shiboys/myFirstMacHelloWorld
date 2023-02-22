@@ -99,6 +99,16 @@ public class Graph implements GraphApi {
     }
   }
 
+  public Graph(int nodeSize) {
+    if (nodeSize < 1) {
+      throw new IllegalArgumentException(String.format("node size of graph is illegal. [nodeSize=%s]", nodeSize));
+    }
+    this.nodeSize = nodeSize;
+    this.edges = (Bag<Integer>[]) new Bag[nodeSize];
+    for (int i = 0; i < nodeSize; i++) {
+      this.edges[i] = new Bag<>();
+    }
+  }
 
   @Override
   public void addEdge(int fromNodeIndex, int toNodeIndex) {

@@ -13,10 +13,14 @@ import java.net.URL;
 public class GraphUtil {
 
   public static Graph buildDemoGraph(String fileName) {
+    return new Graph(getGraphFilePath(fileName));
+  }
+
+  public static String getGraphFilePath(String fileName) {
     String filePath = Graph.class.getPackage().getName().replace(".", "/") + "/" + fileName;
     URL resource = ClassLoader.getSystemResource("");
     filePath = resource.getPath() + filePath;
-    return new Graph(filePath);
+    return filePath;
   }
 
 }
