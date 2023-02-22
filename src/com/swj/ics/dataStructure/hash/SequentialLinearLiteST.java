@@ -32,7 +32,7 @@ public class SequentialLinearLiteST<Key, Value> implements ST<Key, Value> {
       return 0;
     }
     int hash = key.hashCode();
-    return (hash | (hash >> 16)) % capacity;
+    return ((hash ^ (hash >>> 16)) & 0x7fffffff) % capacity;
   }
 
   @Override

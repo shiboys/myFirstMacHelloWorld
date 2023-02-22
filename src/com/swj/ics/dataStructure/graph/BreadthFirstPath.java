@@ -3,6 +3,7 @@ package com.swj.ics.dataStructure.graph;
 import com.swj.ics.dataStructure.queue.Queue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -14,6 +15,8 @@ import java.util.List;
  * 然后再从队列弹出，遍历其子节点/图的连接目标节点，再次存入队列中
  */
 public class BreadthFirstPath implements GraphPathApi {
+
+  private static final int INFINITY = Integer.MAX_VALUE;
 
   private boolean[] markedNodeArray;
 
@@ -33,6 +36,8 @@ public class BreadthFirstPath implements GraphPathApi {
     this.startNodeIndex = startNodeIndex;
     markedNodeArray = new boolean[graph.nodeSize()];
     distanceToArray = new int[graph.nodeSize()];
+    // 默认任何节点距离 startNodeIndex 无穷远。
+    Arrays.fill(distanceToArray, INFINITY);
     reversedPathNodeArray = new int[graph.nodeSize()];
     bfs(graph, startNodeIndex);
   }

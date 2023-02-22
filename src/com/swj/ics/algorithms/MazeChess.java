@@ -18,6 +18,7 @@ public class MazeChess {
 
         nodeArr = new int[xsize][ysize];
 
+
         for(int i = 0;i < xsize;i++) {
             nodeArr[i][0] = 0;// 第i行，第0列
             nodeArr[i][ysize-1] = 0;//第i行，最后一列初始化为0
@@ -100,6 +101,7 @@ public class MazeChess {
         *   } else {
         *       若栈不空且栈顶尚有其他位置未经探索
         *           则设定新的当前位置为沿顺时针方向旋转找到一个栈顶位置的下一个相邻块。
+        *       否则
         *       while（如果栈不空且当前位置四周均不通，为死胡同）{
         *           弹出栈顶元素，标记当前路径为不可达或者删除当前通道块。
         *       }
@@ -316,6 +318,7 @@ public class MazeChess {
         boolean isReached = getMazePath(startNodePos,endNodePos);
         if (isReached) {
             printf("success! path is ");
+            // 打印 1.。。。n 的 stepIndex
             printMaze(nodeArr);
         } else {
             printf("the maze is unreachable!");

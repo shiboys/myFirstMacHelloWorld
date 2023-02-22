@@ -29,6 +29,7 @@ public class DegreeOfSeparation {
       return null;
     }
     int nodeIndex = symbolGraph.indexOf(sourceAddr);
+    // todo: 栈溢出异常了。芭比Q 了。\
     BreadthFirstPath bfs = new BreadthFirstPath(symbolGraph.getGraph(), nodeIndex);
     int targetNodeIndex = symbolGraph.indexOf(targetAddr);
     if (!bfs.hasPathTo(targetNodeIndex)) {
@@ -77,7 +78,7 @@ public class DegreeOfSeparation {
      *
      * 我自己的路径是如下：
      * [JFK, ORD, PHX, LAS] 经过跟原图对比发现，这个也是正确的。请参考原图 symbol-graph.png
-     *
+     * 这里之所以不相同，是因为 ST 的哈希表 我用了 尾插法，但是 Graph 里面的 edges 的 Bag 数组里面的 Bag 对象用的还是 头插法
      */
   }
 }
