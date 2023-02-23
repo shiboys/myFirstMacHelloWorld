@@ -83,6 +83,15 @@ public class GraphMazeChess {
     }
   }
 
+  /**
+   * 核心算法我一遍写完，但是跑完发现有 bug 经过 大概 10 分钟的调试分析发现，有 3 处 bug：
+   * 1、DirectionEnum 的 x 轴 和 Y 轴的值定义错了，导致向前跑失败
+   * 2、计算下一个需要移动的位置的时候，不时有弹出的 节点位置算起，而是用 currentPosition 算起，currentPosition 代表了当前位置的下一个位置，当前位置变换，那么 currentPosition 必须跟着变化
+   * 3、辅助栈弹出数据的时机不对，当一个节点发现 4 个方向都是无法通行的时候，需要立即将之标注为失效节点，然后从栈中弹出下一个元素进行判断，而不是先弹出在判断，这样就是判断的下一个节点。
+   * @param startPos
+   * @param endPos
+   * @return
+   */
   public boolean generateMazePath(NodePosition startPos, NodePosition endPos) {
     if (startPos == null || endPos == null) {
       throw new IllegalArgumentException("startPos and end position both can not be null");

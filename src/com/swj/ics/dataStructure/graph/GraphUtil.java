@@ -17,10 +17,13 @@ public class GraphUtil {
   }
 
   public static String getGraphFilePath(String fileName) {
-    String filePath = Graph.class.getPackage().getName().replace(".", "/") + "/" + fileName;
+    return getGraphFilePath(Graph.class,fileName);
+  }
+
+  public static String getGraphFilePath(Class<?> clazz, String fileName) {
+    String filePath = clazz.getPackage().getName().replace(".", "/") + "/" + fileName;
     URL resource = ClassLoader.getSystemResource("");
     filePath = resource.getPath() + filePath;
     return filePath;
   }
-
 }
