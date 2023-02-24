@@ -59,7 +59,7 @@ public class BinaryHeapMin<Key extends Comparable<Key>> implements Iterable<Key>
     while (2 * k <= size) {
       int child = left(k);
       int right = right(k);
-      // 如果右边比左边大，则取右边（取左右子节点的最大节点）
+      // 如果右边比左边小，则取右边（取左右子节点的最小节点）
       // 这里的 right 判断条件必须是 小于，不能等于，否则 rightChild 就越界了
       if (right < size && greater(child, right)) {
         child = right;
