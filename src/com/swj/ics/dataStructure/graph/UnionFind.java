@@ -44,7 +44,7 @@ public class UnionFind {
      * @param p
      * @return
      */
-    private int find(int p) {
+    public int find(int p) {
         if (p < 0 || p >= componentIdOfArray.length) {
             throw new IllegalArgumentException("p is illegal.[p=" + p + "]");
         }
@@ -61,7 +61,7 @@ public class UnionFind {
         return p;
     }
 
-    private void union(int p, int q) {
+    public void union(int p, int q) {
         int rootP = find(p);
         int rootQ = find(q);
         // p 和 q 本来就在同一个组件里面
