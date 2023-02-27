@@ -77,16 +77,16 @@ public class EdgeWeightedGraph {
     for (int i = 0; i < nodeSize; i++) {
       neighbors[i] = new Bag<>();
     }
-    Stack<Edge> edgeSatck = new Stack<>();
+    Stack<Edge> edgeStack = new Stack<>();
     for (int i = 0, len = other.neighbors.length; i < len; i++) {
       neighbors[i] = new Bag<>();
       // 因为 bag 是采用 头插法，但是遍历的 Iterable<> 接口又是从头到尾遍历，所以这里使用栈将结果暂存，移植到当前对象的时候，
       // 最先插入 Bag 链表里面的是 other 的 neighbours 最后一个元素，符合转移过来以后顺序一直
       for (Edge edge : other.neighbors[i]) {
-        edgeSatck.push(edge);
+        edgeStack.push(edge);
       }
-      while (!edgeSatck.isEmpty()) {
-        neighbors[i].add(edgeSatck.pop());
+      while (!edgeStack.isEmpty()) {
+        neighbors[i].add(edgeStack.pop());
       }
     }
   }

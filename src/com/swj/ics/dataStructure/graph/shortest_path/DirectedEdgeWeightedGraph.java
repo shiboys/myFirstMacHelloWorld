@@ -50,7 +50,7 @@ public class DirectedEdgeWeightedGraph {
       int k = 0;
       String[] splitArr;
       while ((line = br.readLine()) != null && (k++) < edgeSize) {
-        splitArr = line.split(delimiter);
+        splitArr = line.replace("  ", delimiter).split(delimiter);
         if (splitArr.length < 3) {
           continue;
         }
