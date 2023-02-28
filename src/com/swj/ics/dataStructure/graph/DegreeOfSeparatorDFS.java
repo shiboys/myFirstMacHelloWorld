@@ -23,10 +23,10 @@ public class DegreeOfSeparatorDFS {
     }
     int startNodeIndex = symbolGraph.indexOf(sourceActorName);
     int targetNodeIndex = symbolGraph.indexOf(targetActorName);
-    DepthFirstPath dfs = new DepthFirstPath(symbolGraph.getGraph(), startNodeIndex);
+    DepthFirstPath dfs = new DepthFirstPath(symbolGraph.getGraph(), startNodeIndex, DepthFirstPath.VisitStyle.LOOP);
     if (!dfs.hasPathTo(targetNodeIndex)) {
-      System.err.println(
-          "target actor name : " + targetActorName + " is not connected with source name of " + sourceActorName);
+      System.err.println(String.format("target actor name %s is not connected with source name of %s",
+              targetActorName, sourceActorName));
       return;
     }
     for (int nodeIndex : dfs.pathTo(targetNodeIndex)) {

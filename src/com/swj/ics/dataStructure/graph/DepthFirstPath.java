@@ -1,6 +1,7 @@
 package com.swj.ics.dataStructure.graph;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
@@ -15,18 +16,83 @@ import java.util.Stack;
  * 就得到从 A 到 D 经过的节点。
  */
 public class DepthFirstPath implements GraphPathApi {
+
+  public static enum VisitStyle {
+    RECURSIVE,
+    LOOP,
+    OTHER
+  }
+
+
   boolean[] markedNodeArray;
   private int[] reversedVisited;
   private int startNodeIndex;
+  private Graph graph;
 
   public DepthFirstPath(Graph graph, int startNodeIndex) {
+    this(graph, startNodeIndex, VisitStyle.RECURSIVE);
+  }
+
+  public DepthFirstPath(Graph graph, int startNodeIndex, VisitStyle visitStyle) {
     markedNodeArray = new boolean[graph.nodeSize()];
     reversedVisited = new int[graph.nodeSize()];
     this.startNodeIndex = startNodeIndex;
-    dfs(graph, startNodeIndex);
+    this.graph = graph;
+    if (visitStyle == VisitStyle.LOOP) {
+      dfsWithStack(graph, startNodeIndex);
+    } else if (visitStyle == VisitStyle.RECURSIVE) {
+      dfs(graph, startNodeIndex);
+    }
+  }
+
+  public List<List<Integer>> dfsFull(int endNodeIndex) {
+    if (endNodeIndex < 0) {
+      throw new IllegalArgumentException("endNodeIndex is invalid");
+    }
+    LinkedList<Integer> nodeList = new LinkedList<>();
+    List<List<Integer>> allPathNodeList = new ArrayList<>();
+    nodeList.add(startNodeIndex);
+    doDfsFull(this.startNodeIndex, endNodeIndex, nodeList, allPathNodeList);
+    return allPathNodeList;
+  }
+
+  /**
+   * 深度优先遍历，全路径
+   *
+   * @param headNode        头结点
+   * @param endNodeIndex    尾结点
+   * @param nodeList        一个头尾结点路径的所有节点集合
+   * @param allPathNodeList 所有的可能的路径列表
+   */
+  private void doDfsFull(int headNode, int endNodeIndex, LinkedList<Integer> nodeList,
+      List<List<Integer>> allPathNodeList) {
+    // 这里用 getLast() 也行，但是 getLast 会抛出异常
+    if (nodeList.peekLast() == endNodeIndex) {
+      allPathNodeList.add(new LinkedList<>(nodeList));
+      return;
+    }
+
+    for (int nodeIndex : graph.linkedNeighbors(headNode)) {
+      if (!markedNodeArray[nodeIndex]) {
+        // 递归
+        markedNodeArray[nodeIndex] = true;
+        // 加入路径队列
+        // 使用 add 也可以，但是 offer 是队列的接口,add 是 list 的接口
+        nodeList.offer(nodeIndex);
+        doDfsFull(nodeIndex, endNodeIndex, nodeList, allPathNodeList);
+        // 从队列中弹出,相当于路径回退
+        // 使用 removeLast() 也可以，poll 也是 queue 的接口，removeLast 是会抛出异常的 poll
+        nodeList.poll();
+        //取消标识
+        markedNodeArray[nodeIndex] = false;
+      }
+    }
   }
 
   private void dfs(Graph graph, int startNodeIndex) {
+    if (markedNodeArray[startNodeIndex]) {
+      return;
+    }
     markedNodeArray[startNodeIndex] = true;
     // neighbors 根据头插法，0-2 表示 2 是最后插入到 0 的 neighbors 链表的，
     // 因此 2 是 起始节点 0 的第一个 neighbor，所以在 深度遍历的时候，会被优先遍历到。
@@ -35,6 +101,39 @@ public class DepthFirstPath implements GraphPathApi {
         reversedVisited[nodeIndex] = startNodeIndex;
         dfs(graph, nodeIndex);
       }
+    }
+  }
+
+  /**
+   * 使用栈而非递归来实现深度优先遍历，防止栈溢出异常
+   *
+   * @param graph          图
+   * @param startNodeIndex 开始节点
+   */
+  private void dfsWithStack(Graph graph, int startNodeIndex) {
+    Stack<Integer> dfsStack = new Stack<>();
+    dfsStack.push(startNodeIndex);
+    List<Integer> nodeIndexList = new ArrayList<>();
+    while (!dfsStack.isEmpty()) {
+      int nodeIndex = dfsStack.pop();
+      markedNodeArray[nodeIndex] = true;
+      nodeIndexList.clear();
+      for (int subNodeIndex : graph.linkedNeighbors(nodeIndex)) {
+        // 如果当前节点没有遍历过，则进行遍历
+        if (!markedNodeArray[subNodeIndex]) {
+          precessDfsWithStackDepth(subNodeIndex, nodeIndex);
+          nodeIndexList.add(subNodeIndex);
+        }
+      }
+      for (int i = nodeIndexList.size() - 1; i >= 0; i--) {
+        dfsStack.push(nodeIndexList.get(i));
+      }
+    }
+  }
+
+  private void precessDfsWithStackDepth(int tailNodeIndex, int startNodeIndex) {
+    if (!markedNodeArray[tailNodeIndex]) {
+      reversedVisited[tailNodeIndex] = startNodeIndex;
     }
   }
 

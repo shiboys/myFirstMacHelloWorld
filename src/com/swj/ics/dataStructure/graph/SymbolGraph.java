@@ -7,6 +7,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -35,6 +41,30 @@ public class SymbolGraph {
     initKeys();
     initGraph(fileName, delimiter);
   }
+
+  public SymbolGraph(Map<String, List<String>> dict) {
+    nameSt = new SequentialLinearLiteST<>();
+    int size = 0;
+    for (String key : dict.keySet()) {
+      nameSt.put(key, size++);
+    }
+    initKeys();
+    this.graph = new Graph(nameSt.size());
+    for (Map.Entry<String, List<String>> entry : dict.entrySet()) {
+      if (entry.getValue() == null || entry.getValue().isEmpty()) {
+        continue;
+      }
+      if (!contains(entry.getKey())) {
+        System.out.println("this graph does not contains key of " + entry.getKey());
+        continue;
+      }
+      int head = indexOf(entry.getKey());
+      for (String keyWord : entry.getValue()) {
+        this.graph.addEdge(head, indexOf(keyWord));
+      }
+    }
+  }
+
 
   private void readFileContentToFillContainer(String fileName, String delimiter) {
     readFileContentToFunc(fileName, delimiter, line -> {
@@ -104,13 +134,49 @@ public class SymbolGraph {
   }
 
   public static void main(String[] args) {
-    String fileName = "routes.txt";
+    // String fileName = "routes.txt";
+    // testMovie();
+    Map<String, List<String>> dictMap = new LinkedHashMap<>();
+    dictMap.put("hit", Collections.singletonList("hot"));
+    dictMap.put("hot", Arrays.asList("dot", "lot"));
+    dictMap.put("dot", Arrays.asList("dog"));
+    dictMap.put("dog", Arrays.asList("cog"));
+    dictMap.put("lot", Arrays.asList("log"));
+    dictMap.put("log", Arrays.asList("cog"));
+    dictMap.put("cog", new ArrayList<>());
+
+    SymbolGraph symbolGraph = new SymbolGraph(dictMap);
+    String startNodeName = "hit";
+    String endNodeName = "cog";
+    int startNode = symbolGraph.indexOf(startNodeName);
+    int endNode = symbolGraph.indexOf(endNodeName);
+    DepthFirstPath depthFirstPath =
+        new DepthFirstPath(symbolGraph.getGraph(), startNode, DepthFirstPath.VisitStyle.OTHER);
+    List<List<Integer>> lists = depthFirstPath.dfsFull(endNode);
+    if (lists == null || lists.isEmpty()) {
+      System.err.println(" not found path from " + startNodeName + " to " + endNodeName);
+    } else {
+      for (List<Integer> pathList : lists) {
+        int i = 0;
+        for (int nodeIndex : pathList) {
+          System.out.print(symbolGraph.nameOf(nodeIndex));
+          if ((i++) != pathList.size() - 1) {
+            System.out.print("->");
+          }
+        }
+        System.out.println();
+      }
+    }
+  }
+
+  private static void testMovie() {
+    String fileName = "movies.txt";
     String filePath = GraphUtil.getGraphFilePath(fileName);
-    String delimiter = " ";
+    String delimiter = "/";
     SymbolGraph symbolGraph = new SymbolGraph(filePath, delimiter);
     Graph graph = symbolGraph.getGraph();
-    String addrs = "JFK,LAX,ORD,BEIJING";
-    for (String addr : addrs.split(",")) {
+    String addrs = "Tin Men (1987)&Bacon, Kevin";
+    for (String addr : addrs.split("&")) {
       if (!symbolGraph.contains(addr)) {
         System.out.println("the graph does not contains addr: " + addr);
         continue;
@@ -118,9 +184,9 @@ public class SymbolGraph {
       System.out.println(addr);
       int nodeIndex = symbolGraph.indexOf(addr);
       Iterable<Integer> nodeIndexIt = graph.linkedNeighbors(nodeIndex);
-      System.out.print("    ");
+
       for (int nodeIdx : nodeIndexIt) {
-        System.out.print(symbolGraph.nameOf(nodeIdx) + " ");
+        System.out.println("    " + symbolGraph.nameOf(nodeIdx));
       }
       System.out.println();
     }
