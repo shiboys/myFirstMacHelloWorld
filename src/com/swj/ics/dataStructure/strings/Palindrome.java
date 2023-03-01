@@ -3,7 +3,7 @@ package com.swj.ics.dataStructure.strings;
 /**
  * @author shiweijie
  * @date 2020/3/8 上午11:27
- * 回文判断。所谓回文，是指正读和反毒都是一样的字符串，比如madam,我爱我，上海自来水来自海上
+ * 回文判断。所谓回文，是指正读和反读都是一样的字符串，比如madam,我爱我，上海自来水来自海上
  * 黄河小浪底浪小河黄，前门出租车租出门前，黄山落叶松叶落山黄，山东落花生花落东山
  */
 public class Palindrome {
