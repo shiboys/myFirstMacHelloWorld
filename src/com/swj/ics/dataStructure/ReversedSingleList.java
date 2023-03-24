@@ -28,10 +28,10 @@ public class ReversedSingleList {
         Node next = null;
 
         while (currNode != null) {
-            if (currNode.next == null) {//跑到最后一个节点了
+            /*if (currNode.next == null) {//跑到最后一个节点了
                 currNode.next = pre;
                 break;
-            }
+            }*/
             next = currNode.next;
             //把当前节点的指针反方向指向前一个节点。
             currNode.next = pre;
@@ -41,7 +41,8 @@ public class ReversedSingleList {
             currNode = next;
         }
 
-        head.next = currNode;
+        // head.next = currNode;
+        head.next = pre;
 
         Node temp = head.next;
         while (temp != null) {

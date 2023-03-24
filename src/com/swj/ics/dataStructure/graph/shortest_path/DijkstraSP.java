@@ -14,6 +14,8 @@ import java.util.Stack;
  * @since 2023/02/25 16:33
  * 使用 Dijkstra 算法思想的最短路径
  * Dijkstra 算法只适用于所有的边的权重都是正值的情况。
+ * 个人认为讲的比较好的视频在 B 站的是
+ * https://www.bilibili.com/video/BV1zz4y1m7Nq/
  */
 public class DijkstraSP {
 

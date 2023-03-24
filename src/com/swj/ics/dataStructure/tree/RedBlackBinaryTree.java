@@ -21,6 +21,9 @@ public class RedBlackBinaryTree<Key extends Comparable<Key>, Value> {
     BLACK;
   }
 
+  public RBNode getRoot() {
+    return root;
+  }
 
   private class RBNode {
     private RBNode left;
@@ -53,27 +56,28 @@ public class RedBlackBinaryTree<Key extends Comparable<Key>, Value> {
       }
       parent = node;
       if (cmp < 0) {
-        node = node.left;
+        node = node.right; // 节点的 key  < 当前key，需要往右子节点查找
       } else {
-        node = node.right;
+        node = node.left;
       }
     }
 
     cmp = parent.key.compareTo(key);
     if (cmp > 0) {
-      parent.right = newNode;
+      parent.left = newNode; // key 比父节点小，则为父节点的左子节点
     } else {
-      parent.left = newNode;
+      parent.right = newNode;
     }
+    newNode.parent = parent;
     insertFix(newNode);
   }
 
 
-  public void insertFix(RBNode newNode) {
+  private void insertFix(RBNode newNode) {
+    this.root.color = Color.BLACK;
     if (newNode == null) {
       return;
     }
-    this.root.color = Color.BLACK;
     /**
      * 旋转逻辑：
      * 新增节点为红色
@@ -97,47 +101,47 @@ public class RedBlackBinaryTree<Key extends Comparable<Key>, Value> {
       return;
     }
     RBNode gp = parent.parent;
-    if (gp == null) {
-      // 没有祖父节点, 那此时应该是只有根节点和其子节点
-      return;
-    }
     RBNode uncle = null;
-    if (parent == gp.left) {
-      uncle = gp.right;
-    } else {
-      uncle = gp.left;
+    if (gp != null) {
+      if (parent == gp.left) {
+        uncle = gp.right;
+      } else {
+        uncle = gp.left;
+      }
     }
     // 父节点和叔父节点均为红色
-    if (uncle.color == Color.RED) {
+    if (uncle != null && uncle.color == Color.RED) {
       uncle.color = Color.BLACK;
       parent.color = Color.BLACK;
       gp.color = Color.RED;
       insertFix(gp);
     } else {
-      // 叔父节点为黑色
+      // 叔父节点为黑色. uncle == null 视为黑色
       if (newNode == parent.left) {
         // ll 型
         if (parent == gp.left) {
-          rotateRight(parent);
+          rotateRight(gp);
           // 再变色
           parent.color = Color.BLACK;
-          gp.color = Color.RED;
-        } else { // lr 型
-          // 先左旋变成 ll
-          rotateLeft(parent);
-          // 然后在递归进行右旋
+          gp.color = Color.RED; // todo：看了 jdk ConcurrentHashMap 的红黑树，发现这里可能有个 bug ，通过调试发现这不是个问题，
+          // 上述两个变色语句，可以正确地把节点颜色变过来，即使gp原理是根节点，经过旋转以后，是根节点的子节点，parent 变成跟节点
+        } else { // / 父节点是祖父节点的 right，当前节点是父节点的 left ，因此为 rl 型
+          rotateRight(parent); // 先右旋变成 rr，然后再递归左旋
           insertFix(parent);
         }
       } else if (newNode == parent.right) {
         // rr 型
         if (parent == gp.right) {
-          rotateLeft(parent);
+          rotateLeft(gp);
           // 再变色
           parent.color = Color.BLACK;
           gp.color = Color.RED;
-        } else {
-          // rl 型
-          rotateRight(parent); // 先右旋变成 rr，然后再递归左旋
+        } else { // 父节点是祖父节点的 left，当前节点是父节点的 right ，因此为 lr 型
+          // 先左旋变成 ll
+          rotateLeft(parent);
+          // 左旋之后，parent 变成左子节点，
+          // 使用 左子节点 的父节点当做新节点，进行递归
+          // 然后在递归进行右旋
           insertFix(parent);
         }
       }
@@ -152,8 +156,8 @@ public class RedBlackBinaryTree<Key extends Comparable<Key>, Value> {
    * x               y
    * / \    左旋      /\
    * lx  y  ----->   x  ry
-   * / \         /\
-   * ly  ry     lx  ly
+   * / \          /\
+   * ly  ry       lx  ly
    *
    * @param x ,以 x 节点为起始点，开始进行旋转。
    */
@@ -212,6 +216,7 @@ public class RedBlackBinaryTree<Key extends Comparable<Key>, Value> {
     if (x.right != null) {
       x.right.parent = y;
     }
+
     //2、x.right=y; y.parent =x;
     x.right = y;
     y.parent = x;
@@ -226,6 +231,33 @@ public class RedBlackBinaryTree<Key extends Comparable<Key>, Value> {
     } else {
       this.root = x;
     }
+  }
+
+  public static void main(String[] args) {
+    RedBlackBinaryTree<Integer, Integer> redBlackTree = new RedBlackBinaryTree<>();
+    // 12-1-9-2-0-11-7-19
+    redBlackTree.insertNode(12, 12);
+    redBlackTree.insertNode(1, 1);
+    redBlackTree.insertNode(9, 9);
+    redBlackTree.insertNode(2, 2);
+    redBlackTree.insertNode(0, 0);
+    redBlackTree.insertNode(11, 11);
+    redBlackTree.insertNode(7, 7);
+    redBlackTree.insertNode(9, 9);
+    redBlackTree.preOrderVisit(redBlackTree);
+  }
+
+  void preOrderVisit(RedBlackBinaryTree<Integer, Integer> redBlackTree) {
+    doPreOrderVisit((RBNode) redBlackTree.getRoot());
+  }
+
+  void doPreOrderVisit(RBNode p) {
+    if (p == null) {
+      return;
+    }
+    doPreOrderVisit(p.left);
+    System.out.print(p.key + " ");
+    doPreOrderVisit(p.right);
   }
 
 }
