@@ -243,7 +243,7 @@ public class RedBlackBinaryTree<Key extends Comparable<Key>, Value> {
     redBlackTree.insertNode(0, 0);
     redBlackTree.insertNode(11, 11);
     redBlackTree.insertNode(7, 7);
-    redBlackTree.insertNode(9, 9);
+    redBlackTree.insertNode(19, 19);
     redBlackTree.preOrderVisit(redBlackTree);
   }
 

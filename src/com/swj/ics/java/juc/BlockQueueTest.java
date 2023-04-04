@@ -1,11 +1,12 @@
 package com.swj.ics.java.juc;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.Exchanger;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -72,7 +73,21 @@ public class BlockQueueTest {
     System.out.println(Integer.numberOfLeadingZeros(1));
     System.out.println(Integer.numberOfLeadingZeros(-1));
     System.out.println(Integer.numberOfLeadingZeros(2));
-    System.out.println(Integer.numberOfLeadingZeros(-2));
+    System.out.println(Integer.numberOfLeadingZeros(10));
+    System.out.println(Integer.toBinaryString(-10));
+
+  /*  ExecutorService executor = Executors.newFixedThreadPool(1);
+    executor.shutdown(); // 或者 executor.shutdownNow()
+    try {
+      do {
+
+      } while (!executor.awaitTermination(2, TimeUnit.SECONDS));
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }*/
+    long l1 = 1L << 31;
+    long l2 = 0x80000000L;
+    System.out.println(l1 == l2);
   }
 
   static class ExchangeThread extends Thread {
