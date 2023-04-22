@@ -1,5 +1,8 @@
 package com.swj.ics.jvm;
 
+import org.openjdk.jol.info.ClassLayout;
+
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -44,13 +47,13 @@ public class JavaObject {
      但是我们在使用一些 JDK 的内置 API 时，如 StringBuffer、Vector、HashTable 等，这个时候会存在隐性的加锁操作。
      比如 StringBuffer 的 #append(..)方法，Vector 的 add(...) 方法：
      */
-    public void vectorTest(){
+   /* public void vectorTest(){
         Vector<String> vector = new Vector<String>();
         for (int i = 0 ; i < 10 ; i++){
             vector.add(i + "");
         }
         System.out.println(vector);
-    }
+    }*/
     /**
      * 在运行这段代码时，JVM 可以明显检测到变量 vector 没有逃逸出方法 #vectorTest() 之外，
      * 所以 JVM 可以大胆地将 vector 内部的加锁操作消除。
@@ -91,4 +94,12 @@ public class JavaObject {
      通过 CAS 竞争锁失败，证明当前存在多线程竞争情况，当到达全局安全点，获得偏向锁的线程被挂起，偏向锁升级为轻量级锁，然后被阻塞在安全点的线程继续往下执行同步代码块。
      执行同步代码块
      */
+
+    private int a = 8;
+    private ArrayList list = new ArrayList();
+
+    public static void main(String[] args) {
+        JavaObject javaObject = new JavaObject();
+        System.out.println(ClassLayout.parseInstance(javaObject).toPrintable());
+    }
 }
