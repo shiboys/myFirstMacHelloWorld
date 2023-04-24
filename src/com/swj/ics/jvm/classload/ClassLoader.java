@@ -1,4 +1,4 @@
-package com.swj.ics.jvm;
+package com.swj.ics.jvm.classload;
 
 import java.util.Random;
 
@@ -37,7 +37,7 @@ public class ClassLoader {
         System.out.println(I.a);
         //I.a = 12; 赋值语句是非法的，因为接口里面的变量是 static final的
 
-       // Class.forName("com.swj.ics.jvm.DemoObj");
+       // Class.forName("com.swj.ics.jvm.classload.DemoObj");
 
         //System.out.println(Child.age);//这里初始化的顺序是 父类->子类
         //下面演示一个诡异的事情
