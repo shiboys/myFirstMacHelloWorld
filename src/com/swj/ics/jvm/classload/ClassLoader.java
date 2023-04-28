@@ -1,5 +1,9 @@
 package com.swj.ics.jvm.classload;
 
+import sun.misc.Launcher;
+
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Random;
 
 /**
@@ -45,8 +49,23 @@ public class ClassLoader {
         //System.out.println(Child.salary);//这里会不会初始化父类那？会不会初始化子类那？
         //结果证明，会初始化父类，但是不会初始化子类。这是类的被动引用的一部分。
         //诡异二：直接使用数组，类并不会被初始化
-        DemoObj[] demoObjs = new DemoObj[10];
+       // DemoObj[] demoObjs = new DemoObj[10];
 
+        printParentClassLoaderPath();
+    }
+
+    public static void printParentClassLoaderPath() {
+        URL[] urLs = Launcher.getBootstrapClassPath().getURLs();
+        System.out.println("BootStrap ClassLoader paths are listed:");
+        for(URL url : urLs) {
+            System.out.println(url);
+        }
+        System.out.println("Extension ClassLoader paths are listed:");
+        urLs = ((URLClassLoader)java.lang.ClassLoader.getSystemClassLoader().getParent()).getURLs();
+
+        for(URL url : urLs) {
+            System.out.println(url);
+        }
     }
 }
 
