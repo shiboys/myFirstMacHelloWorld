@@ -7,6 +7,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author shiweijie
  * @version 1.0.0
  * @since 2023/04/04 15:22
+ * ThreadLocal 最佳实践：
+ * 废弃项目的回收依赖于显式地触发，否则就要等待线程结束，进而回收相应ThreadLocalMap！
+ * 这就是很多OOM的来源，所以通常都会建议，应用一定要自己负责remove，
+ * 并且不要和线程池配合，因为worker线程往往是不会退出的。
  */
 public class MyThreadLocal<T> {
 
@@ -205,7 +209,11 @@ public class MyThreadLocal<T> {
     }
 
     private int nextIndex(int i, int len) {
-      return i >= len - 1 ? 0 : (i + 1);
+      int nextIndex = i + 1;
+      if (nextIndex >= len) {
+        return 0;
+      }
+      return nextIndex + 1;
     }
 
     private int prevIndex(int i, int len) {

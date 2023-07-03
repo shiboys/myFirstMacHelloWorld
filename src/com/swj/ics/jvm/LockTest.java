@@ -33,6 +33,9 @@ public class LockTest {
       }
       long diff = System.currentTimeMillis() - s;
       System.out.println(diff);
+
+      //LinkeMap map =
     }
+
   }
 }

@@ -75,6 +75,10 @@ public class MCSLock implements Lock {
   }
 
   public static void main(String[] args) {
-    LockUtil.lockTest(new MCSLock(), 10);
+    // LockUtil.lockTest(new MCSLock(), 10);
+    System.out.println(-1 / 2);
+    System.out.println(-1 >> 1);
+    System.out.println(4 >> 1);
+    System.out.println(4 >> 1 >> 1);
   }
 }

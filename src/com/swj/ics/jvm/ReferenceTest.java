@@ -7,8 +7,8 @@ import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
-
-import javax.xml.bind.SchemaOutputResolver;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author shiweijie
@@ -22,8 +22,12 @@ public class ReferenceTest {
 
   public static void main(String[] args) throws InterruptedException {
     // softReferenceTest();
-    // weakReferenceTest();
-    TraceCanReliveObj.runPhantomReferenceTest();
+    weakReferenceTest();
+    //TraceCanReliveObj.runPhantomReferenceTest();
+  }
+
+  private static void LinkedHashMapTest() {
+
   }
 
   private static void softReferenceTest() throws InterruptedException {
@@ -39,16 +43,32 @@ public class ReferenceTest {
     u1 = null;
     System.out.println(userSoftReference.get());
     System.gc();
+    /**
+     * 如果内存够用，即使发生 gc，也仍然不会被回收
+     */
     System.out.println("After gc:");
     System.out.println(userSoftReference.get());
 
     try {
       System.out.println("generate new byte array and gc again");
+      /**
+       * 抛出 OOM Error 之前回收软引用的对象内存
+       */
       byte[] bytes = new byte[1024 * 1024 * 7];
       System.gc();
       System.out.println(userSoftReference.get());
     } catch (Throwable e) {
       e.printStackTrace();
+      /**
+       * OOM 异常后，到这里，对象肯定已经被回收，这个的 get() 返回的是 null
+       * user id :1 is delete.
+       * error occured.
+       * null
+       * user id :1 is delete. 出现在 catch 的打印之前，更能充分说明在抛出 OOM Error 之前，软引用先被回收，然后
+       * 放入 ReferenceQueue 中
+       *  -XX:+PrintGCDetails -XX:+PrintReferenceGC 使用 gvm 参数可以跟踪虚、弱、软应用的回收情况
+       */
+      System.out.println("error occurred.");
       System.out.println(userSoftReference.get());
     }
     Thread.sleep(1000);
@@ -65,7 +85,7 @@ public class ReferenceTest {
             obj = (UserSoftReference) reference;
           }
           if (obj != null) {
-            // 此时 调用 get() 返回 Null，但是 obj 并不是 null
+            // 此时 调用 get() 返回 Null，但是 obj 并不是 null。主要用户跟踪对象是否被回收
             System.out.println("user id :" + obj.uid + " is delete.");
           }
         } catch (Exception e) {
@@ -163,7 +183,7 @@ public class ReferenceTest {
       obj = null;
       System.gc();
       Thread.sleep(1000);
-      if(obj == null) { // 在 finalize 里面被抢救了一次
+      if (obj == null) { // 在 finalize 里面被抢救了一次
         System.out.println("obj is null");
       } else {
         System.out.println("obj is not null");
@@ -173,7 +193,7 @@ public class ReferenceTest {
       obj = null;
       System.gc();
       Thread.sleep(1000);
-      if(obj == null) { // 在 finalize 里面被抢救了一次
+      if (obj == null) { // 在 finalize 里面被抢救了一次
         System.out.println("obj is null");
       } else {
         System.out.println("obj is not null");

@@ -151,20 +151,20 @@ public class RedBlackBinaryTree<Key extends Comparable<Key>, Value> {
 
   /**
    * 以 x 节点为中心进行左旋。左旋一般发生在右子树上
-   * p               p
-   * |               |
-   * x               y
+   * p                p
+   * |                |
+   * x                y
    * / \    左旋      /\
    * lx  y  ----->   x  ry
-   * / \          /\
-   * ly  ry       lx  ly
+   *    / \          / \
+   *    ly  ry      lx  ly
    *
    * @param x ,以 x 节点为起始点，开始进行旋转。
    */
   private void rotateLeft(RBNode x) {
     /**
      * 左旋的基本操作分为 3 个
-     * 1、x.right = ly, ly.parent = x
+     * 1、x.right = ly,  if(ly != null) then ly.parent = x
      * 2、y.left = x, x.parent =y
      * 3、y.parent = p ; if(p.left==x)  p.left=y else p.right = y
      */
@@ -204,8 +204,8 @@ public class RedBlackBinaryTree<Key extends Comparable<Key>, Value> {
    */
   private void rotateRight(RBNode y) {
     /**
-     * 有旋转也是主要有 3 步：
-     * 1、y.left = x.right; x.right.parent = y;
+     * 右旋转也是主要有 3 步：
+     * 1、y.left = ly; if(ly != null) then ly.parent = y;
      * 2、x.right=y; y.parent =x;
      * 3、x.parent=p; if(p.left==y) p.left=x ; else p.right = x
      */

@@ -1,7 +1,5 @@
 package com.swj.ics.jvm.classload;
 
-import sun.misc.Launcher;
-
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Random;
@@ -55,7 +53,7 @@ public class ClassLoader {
     }
 
     public static void printParentClassLoaderPath() {
-        URL[] urLs = Launcher.getBootstrapClassPath().getURLs();
+        URL[] urLs = null;// Launcher.getBootstrapClassPath().getURLs();
         System.out.println("BootStrap ClassLoader paths are listed:");
         for(URL url : urLs) {
             System.out.println(url);

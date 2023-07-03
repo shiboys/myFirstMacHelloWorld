@@ -24,6 +24,8 @@ public class BitImplementsMinus {
     b = 20;
     System.out.println(add(a, b));
     System.out.println(minus(a, b));
+
+    System.out.println(Integer.toBinaryString(-3));
   }
 
   /**
