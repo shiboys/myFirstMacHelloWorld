@@ -13,3 +13,6 @@ HyperLogLog 的使用非常简单，但是原理比较复杂，为了方便立�
 ![调和平均数计算公式2](./images/harmonic_mean2.png)
 
 在 hyperloglog 的实验中，我们使用调和平均数的目的在于：普通的平均数可能因为个别离群值对平均数产生较大的影响，调和平均数可以有效地平滑离群值的影响
+
+## redis 中 HyperLogLog 为什么内存占用 12K？
+我们在 redis_hll_theroy.py 使用了 1024 个桶进行独立计数，而在 redis 中的 HyperLogLog 实现中使用了 16384 个桶，也就是 2^14 , 每个桶的 maxbits 需要占用 6 个 bit 来存储，最大可以表示 maxbits= 63, 于是总共占用内存就是 2^14*6 bit = 2^11*6 byte =12*2^10 byte = 12k 字节
