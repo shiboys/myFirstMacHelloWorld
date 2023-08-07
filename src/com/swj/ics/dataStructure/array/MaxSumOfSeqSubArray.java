@@ -26,9 +26,12 @@ public class MaxSumOfSeqSubArray {
         }
         int maxSum = array[0];
         SumAndSubArray subArray = new SumAndSubArray(maxSum, 0, 0);
+        // 从前向后轮询
         for (int i = 0; i < array.length; i++) {
+            // 从 i 向后轮询
             for (int j = i; j < array.length; j++) {
                 int currSum = 0;
+                // 取出 i 到 j 之间子数组的值，并计算判断是否最大值
                 for (int k = i; k <= j; k++) {
                     currSum += array[k];
                     if (currSum > maxSum) {
@@ -45,7 +48,9 @@ public class MaxSumOfSeqSubArray {
 
     /**
      * 解法2：动态规划法。事实上，可以令 currSum 是以当前元素结尾的最大连续子数组的和。maxSum 为全局最大子数组和，
-     * 当从前往后扫描时，对第 j 个元素有两种选择，要嘛加入当前的子数组，要嘛作为一个新数组的起始元素。如果 currSum > 0，则令 currSum + a[j]
+     * 当从前往后扫描时，对第 j 个元素有两种选择，要嘛加入当前的子数组，要嘛作为一个新数组的起始元素。
+     * (后来我又看了有关动态规划的 patient game 的纸牌游戏, fucking algorithm github 上介绍的，发现原理是一致的，要么加入最前的堆，要嘛自己成立一个新堆)
+     * 如果 currSum > 0，则令 currSum + a[j]
      * 如果 currSum<0，则 currSum 被置为当前元素，即 currSum=a[j]。
      * 公式表述就是：currSum=max{0,currSum{j-1}+a[j]}，如果 currSum>maxSum,则更新 maxSum=currSum,否则 currSum 保持不变，不更新。
      * 举例来说，如果输入的是  {1,-2,3,10,-4,7,2,-5},那么 currSum 和 maxSum 的值变化如下：

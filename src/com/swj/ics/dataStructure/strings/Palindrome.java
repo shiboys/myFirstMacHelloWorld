@@ -14,7 +14,7 @@ public class Palindrome {
    */
 
   /**
-   * 这种实现方式直白且效率不错，时间负载度为O(n),空间复杂度为O(1)
+   * 这种实现方式直白且效率不错，时间复杂度为O(n),空间复杂度为O(1)
    *
    * @param str
    * @return
@@ -101,5 +101,13 @@ public class Palindrome {
       }
     }
     return max;
+  }
+
+  public static void main(String[] args) {
+    String s="sssss";
+    Palindrome instance = new Palindrome();
+    System.out.println(instance.longestPalindrome(s));
+    s="bbbab";
+    System.out.println(instance.longestPalindrome(s));
   }
 }

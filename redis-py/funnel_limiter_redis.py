@@ -53,3 +53,6 @@ def is_action_allowed(action_key, user_id, leak_rate, funnel_capacity):
 for i in range(50):
     time.sleep(random.random())
     print(is_action_allowed('reply', 'peter', 0.5, 15))
+    
+# 这里的漏斗算法仍然可用参考 https://blog.51cto.com/u_15905482/6237162 使用 lua 脚本
+# 实现漏桶部分

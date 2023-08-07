@@ -47,6 +47,9 @@ python 的毫秒是通过以上方法获取的
         print("item count", item_count)
         return item_count <= self.window_el_size
 
+# 上述滑动窗口如果想优化的话，可以使用 lua 脚本，将 zadd 行为放到判断 item_count = nil or 
+# item_count < windows_size 之后，这样就不会造成大量的只是用来判断个数的无用的请求存在 zset 里面
+# 参考 https://blog.51cto.com/u_15905482/6237162 滑动窗口实现
 # def put_ele_to_slide_window()
 
 
