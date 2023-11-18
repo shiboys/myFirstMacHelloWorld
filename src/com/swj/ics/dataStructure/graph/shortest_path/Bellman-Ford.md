@@ -46,3 +46,11 @@ bool Bellman_Ford() {
     return flag;
 }
 ```
+
+3 个 for 循环
+```java
+for (int pass = 0; pass < G.V(); pass++)
+  for (v = 0; v < G.V(); v++)
+    for (DirectedEdge e : G.adj(v))
+      relax(e);
+```

@@ -54,7 +54,8 @@ public class QuickSort {
     int pivotValue = arr[left];
     int i = left, j = right, t;
     while (i < j) {
-      while (arr[j] >= pivotValue && i < j) { //找到大于令牌的数值，然后停下
+      while (arr[j] >= pivotValue && i < j) { //找到大于令牌的数值，然后停下 ，这个算法在我看了阿东的算法框架之后，
+        // 这个排序非常依赖于先 j--, 然后 i++，如果顺序颠倒，则排序错误
         j--;
       }
       while (arr[i] <= pivotValue && i < j) {
@@ -67,7 +68,7 @@ public class QuickSort {
       }
     }
     //此时 i == j ,交换i位置和令牌的位置
-    // 最好加一个判断
+    // 最好加一个判断，性能优化使用，left 指针没有位移
     if (left != i) { // 说明确实发生了指针位移
       arr[left] = arr[i];
       arr[i] = pivotValue;
@@ -94,6 +95,9 @@ public class QuickSort {
     int right = end;
     while (left < right) {
       //需要先从右边向左开始 -- 相等的时候，也要走一步，
+      //这个版本的快速排序算法在我看了阿东的算法框架之后，
+      //这个排序非常依赖于先 j--, 然后 i++，如果顺序颠倒，则排序错误
+      // 因为没有平却 pivot 的判断边界，正确的是 left >= pivot, right < pivot, 并且 left <= right,以表示 start..end 区间全覆盖。
       while (right > left && arr[right] >= pivot) {
         right--;
       }

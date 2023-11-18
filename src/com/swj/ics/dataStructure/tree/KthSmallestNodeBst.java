@@ -2,11 +2,11 @@ package com.swj.ics.dataStructure.tree;
 
 /**
  * Created by swj on 2020/2/22.
- * 给定一个二叉搜索树（BST），找到书中第K小的节点。
+ * 给定一个二叉搜索树（BST），找到树中第K小的节点。
  */
 
 /**
- * 
+ *
      * 5
      / \
      3   6
@@ -78,6 +78,34 @@ public class KthSmallestNodeBst {
             //没有找到，返回节点总数
             return new ResultType(false,leftResultType.nodeCounter+rightResult.nodeCounter+1,root.val);
         }
+
+        // 上述遍历方式也是 采用 左中右的中序遍历，没有采用 BST 的二分搜索效率高
+        // 所以下面的中序遍历 看着更简洁明了，效率一致
+
+        int counter;
+        TreeNode targetNode;
+
+        /**
+         * 该方法经过 leetcode 230 题验证没问题
+         * @param node
+         * @param k
+         */
+        void traverseMid(TreeNode node, int k) {
+            if (node == null) {
+                return;
+            }
+
+            traverseMid(node.left, k);
+            counter++;
+            if (counter == k) {
+                targetNode = node;
+                return;
+            } else if (targetNode != null) { // 如果找到，则
+                return;
+            }
+            traverseMid(node.right, k);
+        }
+
 
     }
 

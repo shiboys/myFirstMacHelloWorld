@@ -2,6 +2,8 @@
 ### Java template
 # Compiled class file
 *.class
+.DS_Store
+*.iml
 
 # Log file
 *.log
@@ -28,11 +30,7 @@ hs_err_pid*
 .idea/workspace.xml
 /.idea/vcs.xml
 /.idea/
-"out/production/myFirstMacHelloWorld1/com/swj/ics/algorithms/sort/mergeSort/\345\275\222\345\271\266.docx"
-"out/production/myFirstMacHelloWorld1/com/swj/ics/algorithms/sort/quicksort/\345\277\253\351\200\237\346\216\222\345\272\217.docx"
 /myFirstHelloWorld.iml
-"target/classes/com/swj/ics/algorithms/sort/mergeSort/\345\275\222\345\271\266.docx"
-"target/classes/com/swj/ics/algorithms/sort/quicksort/\345\277\253\351\200\237\346\216\222\345\272\217.docx"
-target/generated-sources/
 /src/com/swj/ics/dataStructure/hash/jieba/
+target/
 /target/

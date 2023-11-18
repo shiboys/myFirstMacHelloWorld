@@ -13,6 +13,7 @@ import java.util.List;
  * 贝尔曼-福特最短路径算法，
  * 该算法最牛逼的地方在于能够检测到权重为负数的情况，Dijkstra 算法这个做不到
  * 经典的贝尔曼福特算法，书上很多都是介绍的 3 个for 循环，
+ * 看了下算法 4 的代码，发现这是个半成品
  */
 public class BellmanFordSP {
   // 解决浮点精度问题
@@ -34,7 +35,7 @@ public class BellmanFordSP {
   }
 
   public boolean generateBellmanFordSp() {
-    // 每条边松弛次数 V-1 次
+    // 每条边松弛次数 V-1 次？ 这不是 V 次吗？
     for (int i = 0; i <= graph.getNodeSize() - 1; i++) {
       for (DirectedEdge edge : graph.edges()) {
         relax(edge);

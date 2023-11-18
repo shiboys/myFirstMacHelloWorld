@@ -15,7 +15,7 @@ package com.swj.ics.dataStructure.tree.binarytree;
  * 判断这种类型的二叉树那？我们可以借助遍历时经常被忽略的 null 节点，如果把遍历时遇到的 null 节点也考虑进去，就可以辨别出是否是真正的对称二叉树
  * <p>
  * 加上 null 的判断之后，第三个二叉树的前序遍历结果为：7,7,7,null,null,7,null,null,7,7,null,null,null
- * 第三个二叉树的前序遍历的对称遍历结果为：7,7,null,7,null,null,7,7,null,null,7,null,null 这样以来，第三课二叉树就可以认为不对称。
+ * 第三个二叉树的前序遍历的对称遍历结果为：7,7,null,7,null,null,7,7,null,null,7,null,null 这样以来，第三棵二叉树就可以认为不对称。
  */
 public class SymmetricalBinaryTree {
 

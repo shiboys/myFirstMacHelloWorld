@@ -47,4 +47,8 @@ public class CycleGraph {
     return hasCycle;
   }
 
+  /**
+   * 总体来说还是绕，比较容易理解的还是 阿东的  解法，前序遍历位置 使用 onPath[nodeIndex] = true，后序遍历位置使用 onPath[nodeIndex] = false;
+   */
+
 }
