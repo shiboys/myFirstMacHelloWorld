@@ -84,12 +84,11 @@ public class RedBlackBinaryTree<Key extends Comparable<Key>, Value> {
      * 如果父节点为黑色，则不需要旋转
      * 如果父节点为红色，则需要分情况处理
      *    如果叔父节点为红色，则将 parent, uncle 改为黑色，将 grandparent 改为红色，然后再将 grandparent 作为当前节点，进行递归着色
-     *    如果叔父节点为黑色，
-     *    则需要分为内侧插入还是外侧插入；如果是外侧插入
+     *    如果叔父节点为黑色，则需要分为内侧插入还是外侧插入；如果是外侧插入
      *      外侧插入分为左左-LL 和 右右 RR 插入，如果是 LL 双红(父节点和当前节点都是左子节点) 则需要进行右旋一次，然后再进行着色，父节点染色为黑色，祖父节点为红色
      *      外侧插入的 RR 双红（父节点和当前节点都是右子节点），则需要进行左旋一次，父节点染色为黑色，祖父节点为红色，以祖父节点为起始点进行左旋
      *    如果是内侧插入，则分为 LR(父节点为左子节点，当前节点为右节点) 和 RL（父节点为右子节点， 当前节点为左子节点）
-     *    如果是 LR 则需要先 以当前节点的父节点为起始点，先进行左旋,变成 LL，然后在进行右旋。然后再以祖父节点为起始点，进行递归
+     *    如果是 LR 则需要先 以当前节点的父节点为起始点，先进行左旋,变成 LL，然后再进行右旋。然后再以祖父节点为起始点，进行递归
      *    如果是 RL 则需要以当前节点的父节点为起始节点，进行先右旋（变成 RR），然后再进行左旋，然后再以祖父节点为起始点，进行递归
      */
     RBNode parent = newNode.parent;
@@ -125,9 +124,9 @@ public class RedBlackBinaryTree<Key extends Comparable<Key>, Value> {
           parent.color = Color.BLACK;
           gp.color = Color.RED; // todo：看了 jdk ConcurrentHashMap 的红黑树，发现这里可能有个 bug ，通过调试发现这不是个问题，
           // 上述两个变色语句，可以正确地把节点颜色变过来，即使gp原理是根节点，经过旋转以后，是根节点的子节点，parent 变成跟节点
-        } else { // / 父节点是祖父节点的 right，当前节点是父节点的 left ，因此为 rl 型
+        } else { // rl 型 父节点是祖父节点的 right，当前节点是父节点的 left ，因此为 rl 型
           rotateRight(parent); // 先右旋变成 rr，然后再递归左旋
-          insertFix(parent);
+          insertFix(parent);// 经过右旋，parent 节点现在变成右子节点，然后变成了 parent 是我们新插入的节点，因此这里从 parent 节点开始递归
         }
       } else if (newNode == parent.right) {
         // rr 型
@@ -156,8 +155,8 @@ public class RedBlackBinaryTree<Key extends Comparable<Key>, Value> {
    * x                y
    * / \    左旋      /\
    * lx  y  ----->   x  ry
-   *    / \          / \
-   *    ly  ry      lx  ly
+   *    / \         / \
+   *    ly  ry     lx  ly
    *
    * @param x ,以 x 节点为起始点，开始进行旋转。
    */
@@ -189,6 +188,7 @@ public class RedBlackBinaryTree<Key extends Comparable<Key>, Value> {
       }
     } else { // y 就是新的根节点
       this.root = y;
+      this.root.parent = null;
     }
   }
 
@@ -200,18 +200,18 @@ public class RedBlackBinaryTree<Key extends Comparable<Key>, Value> {
    * / \                 / \
    * x  ry               lx  y
    * / \                     / \
-   * lx ly                   ly  ry
+   * lx rx                  rx  ry
    */
   private void rotateRight(RBNode y) {
     /**
      * 右旋转也是主要有 3 步：
-     * 1、y.left = ly; if(ly != null) then ly.parent = y;
+     * 1、y.left = rx; if(rx != null) then rx.parent = y;
      * 2、x.right=y; y.parent =x;
      * 3、x.parent=p; if(p.left==y) p.left=x ; else p.right = x
      */
     RBNode p = y.parent;
     RBNode x = y.left;
-    // 1、y.left = x.right; x.right.parent = y;
+    // 1、y.left = rx; if(rx != null) then rx.parent = y;
     y.left = x.right;
     if (x.right != null) {
       x.right.parent = y;
@@ -230,6 +230,7 @@ public class RedBlackBinaryTree<Key extends Comparable<Key>, Value> {
       }
     } else {
       this.root = x;
+      this.root.parent = null;
     }
   }
 
