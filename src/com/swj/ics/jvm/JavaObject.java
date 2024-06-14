@@ -1,8 +1,10 @@
 package com.swj.ics.jvm;
 
+import com.swj.ics.jvm.classload.ClassLoad;
 import org.openjdk.jol.info.ClassLayout;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Vector;
 
 /**
@@ -99,7 +101,15 @@ public class JavaObject {
     private ArrayList list = new ArrayList();
 
     public static void main(String[] args) {
-        JavaObject javaObject = new JavaObject();
-        System.out.println(ClassLayout.parseInstance(javaObject).toPrintable());
+//        JavaObject javaObject = new JavaObject();
+//        System.out.println(ClassLayout.parseInstance(javaObject).toPrintable());
+
+        B b = new B();
+        System.out.println(ClassLayout.parseInstance(b).toPrintable());
+    }
+
+    private static class B {
+        private int i;
+        private Locale l = Locale.US;
     }
 }

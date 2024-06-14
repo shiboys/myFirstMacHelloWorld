@@ -22,10 +22,14 @@ public class ClassInit {
     }
   }
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws ClassNotFoundException {
     //Child c = new Child();
-    // System.out.println(PassiveChild.v);
-    System.out.println(FinalFieldClass.CONST_STRING);
+     System.out.println(PassiveChild.v);
+     // Class.forName 能进行初始化 PassiveChild，但是 如果只是调用 PassiveChild.v 则只能加 PassiveChild 类，但是不会对其进行初始化
+     //Class.forName(PassiveChild.class.getName());
+    //System.out.println(FinalFieldClass.CONST_STRING);
+
+
   }
 
   static class PassiveParent {

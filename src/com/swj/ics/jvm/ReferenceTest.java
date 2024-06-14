@@ -7,8 +7,6 @@ import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * @author shiweijie
@@ -22,8 +20,8 @@ public class ReferenceTest {
 
   public static void main(String[] args) throws InterruptedException {
     // softReferenceTest();
-    weakReferenceTest();
-    //TraceCanReliveObj.runPhantomReferenceTest();
+    //weakReferenceTest();
+    TraceCanReliveObj.runPhantomReferenceTest();
   }
 
   private static void LinkedHashMapTest() {
@@ -193,11 +191,21 @@ public class ReferenceTest {
       obj = null;
       System.gc();
       Thread.sleep(1000);
-      if (obj == null) { // 在 finalize 里面被抢救了一次
+      /**
+       * The {@code finalize} method is never invoked more than once by a Java
+       * virtual machine for any given object.
+       * 只能被调用一次，所以第二次 GC 就不会被抢救过来
+       */
+      if (obj == null) {
         System.out.println("obj is null");
       } else {
         System.out.println("obj is not null");
       }
+
+      System.out.println(Integer.toBinaryString(10));
+      System.out.println(Integer.toBinaryString(~10));
+      System.out.println(Integer.toBinaryString(~-10));
+      System.out.println(Integer.toBinaryString(-10));
     }
 
     static class PhantomThread extends Thread {

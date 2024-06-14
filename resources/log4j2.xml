@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
+<Configuration status="INFO">
     <Properties>
         <Property name="LOG_BASE_DIR">/opt/logs/unifieduser/</Property>
     </Properties>
@@ -7,10 +7,10 @@
         <!--  输出控制台的配置 -->
         <Console name="console" target="SYSTEM_OUT">
             <!--  控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
-            <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
             <!--  这个都知道是输出日志的格式 -->
             <PatternLayout charset="UTF-8"
-                           pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file:%line] -%msg%n"/>
+                           pattern="%{yyyy-MM-dd HH:mm:ss.SSS}  [%thread] %-5level %logger{36} [%file:%line] -%msg%n"/>
         </Console>
         <!--通用-->
         <RollingFile name="error" fileName="${LOG_BASE_DIR}/error.log"

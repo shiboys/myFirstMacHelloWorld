@@ -85,5 +85,7 @@
     <orderEntry type="library" name="Maven: org.yaml:snakeyaml:2.0" level="project" />
     <orderEntry type="library" name="Maven: org.jodd:jodd-bean:5.1.6" level="project" />
     <orderEntry type="library" name="Maven: org.jodd:jodd-core:5.1.6" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba:transmittable-thread-local:2.13.0" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.12" level="project" />
   </component>
 </module>
