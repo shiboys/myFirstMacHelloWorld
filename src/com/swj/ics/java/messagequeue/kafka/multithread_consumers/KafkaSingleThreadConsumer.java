@@ -1,4 +1,4 @@
-package com.swj.ics.java.messagequeue.kafka;
+package com.swj.ics.java.messagequeue.kafka.multithread_consumers;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

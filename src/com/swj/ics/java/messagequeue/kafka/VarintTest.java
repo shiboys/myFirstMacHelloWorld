@@ -29,10 +29,12 @@ public class VarintTest {
 
   void writeVarint(int value, ByteBuffer buffer) {
     // 先进行 ZigZag 编码，将 大字节占用改为锯齿状编码的小字节占用
+    //如果使用 value >>> 31 就大错特错了，表示无符号右移，但是 zigzag 的实现是有符号右移，该编码的含义是将负数也给编码成正数
     int v = (value << 1) ^ (value >> 31);
-    while ((v & 0xffffff80) != 0) { // v 大于 7 个字节。6 个 f，一个 90
+    while ((v & 0xffffff80) != 0) { // v 大于 7 个字节。0xffffff80 低 7 位是 0 ，剩余位全为 1。
       byte b = (byte) ((v & 0x7f) | 0x80); // 取低 7 位的字节，异或 0x80 将 msb 变为 1 。
       buffer.put(b);
+      // 因为 v 已经被 zigzag 编码为正整数了。使用 无符号右移 没问题，也进行保证
       v = v >>> 7;
     }
     // 剩余字节 put 进 byteBuffer，且 msb 位置默认为 0
@@ -44,7 +46,7 @@ public class VarintTest {
     byte b = 0;
     int shift = 0;
     while (((b = buffer.get()) & 0x80) != 0) { // msb 位置为 1 ，不是最后一个 字节
-      val = val | (b & 0x7f) << shift; // 取出 低 7 位，然后 右移 shift 位置，然后 和 value 进行异或，这样当前 byte 位置就能算入最高位
+      val = val | (b & 0x7f) << shift; // 取出 低 7 位，然后 左移 shift 位置，然后 和 value 进行异或，这样当前 byte 位置就能算入最高位
       shift += 7;
       if (shift > 28) { // 表示 buffer 存储的数字 > int 的最大值 28/7 =4
         throw new IllegalArgumentException("bytebuffer contains more bytes than an integer value");
@@ -52,12 +54,27 @@ public class VarintTest {
     }
     // 最后一个 msb 位置不是 1 的字节
     val |= (b << shift);
-    // 进行 zig-zag 编码去除。正整数都 编码为偶数，负整数都编码为奇数，所以正整数 的 val &1 =0 ,负整数的为 1，前面有个符号也就是 -1 = 1111....1111
+    // 进行 zig-zag 编码去除。正整数都 编码为偶数，负整数都编码为奇数，所以正整数的偶数 val &1 =0 ,负整数的为 1，前面有个符号也就是 -1 = 1111....1111
     val = (val >>> 1) ^ -(val & 1);
     return val;
   }
 
   public static void main(String[] args) {
+    int i = -64;
+    System.out.println(Integer.toBinaryString(i << 1));
+    System.out.println(Integer.toBinaryString(i >> 31));
+    System.out.println(Integer.toBinaryString(i >>> 31));
+    // 输出分别如下：
+    /**
+     * 11111111111111111111111111111110
+     * 11111111111111111111111111111111
+     * 1
+     * 注意区分有符号右移和无符号右移
+     */
+    //testVarInt();
+  }
+
+  private static void testVarInt() {
     VarintTest instance = new VarintTest();
     System.out.println(instance.sizeOfLongWithVarints(-1));
     ByteBuffer buffer = ByteBuffer.allocate(4);
