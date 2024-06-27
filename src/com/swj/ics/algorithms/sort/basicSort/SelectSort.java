@@ -7,7 +7,7 @@ package com.swj.ics.algorithms.sort.basicSort;
  * 将 一个集合里面的最小的元素放在第一个，第二小的放在第二个，。。。第N小的放在第N个。
  * 第一遍寻找最小的放在第一位，第二遍寻找最小的放在第二位
  */
-public class selectSort {
+public class SelectSort {
 
     public static void main(String[] args) {
 

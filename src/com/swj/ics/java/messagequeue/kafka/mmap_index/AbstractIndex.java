@@ -221,9 +221,14 @@ public abstract class AbstractIndex implements Closeable {
     }
 
     // 这里为什么要使用 entries-1 -warmEntries ，我们可以看成是索引项，或者槽 slot 的索引
-    // 或者举个栗子，baseoffset =1000,也就是 0 entry 的 offset 为 1000，我们的 parseEntry 的计算公式为 baseOffset + n*entrySize
+    // 或者举个栗子，baseOffset =1000,也就是 0 entry 的 offset 为 1000，我们的 parseEntry 的计算公式为 baseOffset + n*entrySize
     // 这里的 n 就是索引的含义，第二个 entry 的 offset = baseOffset + 1*entrySize, 因此这里的 n 是index 的意思
 
+    // 确认热区的首个索引项位于那个槽。warmEntries 就是所谓的分割线，目前固定为 8192 字节(8KB)。
+    // 如果是OffsetIndex，warmEntries = 8192 / 8 = 1024，即第 1024 个槽
+    // 如果是TimeIndex，warmEntries = 8192 / 12 = 682，即第 682 个槽
+    // 为什么要采用 8192 字节，源码中也给除了解释，8192 对应 OS 的 2 个Page，即使这 1024 个槽不是刚好存在 2个连续的页，那最多也是 3 个连续的 Page
+    // 这样一次 2 分法查找，就刚好可以把 3 个页都加载进来，不存在所谓的突然出现 Page Fault 的情况，需要去磁盘 load 到页缓存中
     int startOfWarmEntry = Math.max(0, entries - 1 - warmEntries);
     int compareResult = compareIndexEntry(parseEntry(idx, startOfWarmEntry), target, searchEntity);
     // target 位于 warm 区域
