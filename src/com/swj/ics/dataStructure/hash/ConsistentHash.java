@@ -53,6 +53,13 @@ public class ConsistentHash {
     }
     variance = Analysis.getVarianceOfRequestHitServer(requestAnalysisMap);
     System.out.println("虚拟节点，1000 个虚拟节点，10000 个请求，方差为：" + variance);
+    /**
+     * 真实 server 节点，100 个节点，10000 个请求，方差为：93152.30445647644
+     * 虚拟节点，1000 个虚拟节点，10000 个请求，方差为：4492.08
+     * 因此增加虚拟节点请求更加均匀地分布在各个节点中
+     */
+    System.out.println("log(2) is " + Math.log(2));
+    System.out.println("log(10) is " + Math.log(10));
   }
 
   static void runStringHashTest() {
@@ -130,7 +137,7 @@ class LoadBalancerWithVirtualNode implements LoadBalancer {
   public String selectServerNode(String requestUrl) {
     int urlHash = FNV1_32_HASH.getHashCode(requestUrl);
     Map.Entry<Integer, String> virtualServerEntry = containerMap.ceilingEntry(urlHash);
-    if (virtualServerEntry == null) {
+    if (virtualServerEntry == null) {// 一致性 hash 的环形尾部
       virtualServerEntry = containerMap.firstEntry();
     }
     if (virtualServerEntry == null) {
@@ -171,11 +178,11 @@ class Analysis {
       String /*serverName*/> requestHitServerMap) {
     Map<String, Integer> serverHitCountMap = new HashMap<>();
 
-    requestHitServerMap.forEach((key, value) -> {
-      if (serverHitCountMap.containsKey(value)) {
-        serverHitCountMap.put(value, serverHitCountMap.get(value) + 1);
+    requestHitServerMap.forEach((request, server) -> {
+      if (serverHitCountMap.containsKey(server)) {
+        serverHitCountMap.put(server, serverHitCountMap.get(server) + 1);
       } else {
-        serverHitCountMap.put(value, 1);
+        serverHitCountMap.put(server, 1);
       }
     });
     int sum = serverHitCountMap.values().stream().mapToInt(x -> x).sum();
@@ -202,7 +209,9 @@ class FNV1_32_HASH {
    * hash = hash xor octet_of_data
    * return hash
    */
+  //  32 bit FNV_prime = 2^24 + 2^8 + 0x93 = 16777619
   private static final int FNV_Prime = 16777619;
+  // 32 位的 offset_basis 的值是 2166136261, 是经过算法签名计算出来的
   private static final long FNV_Basis = 2166136261L;
 
   static int getHashCode(String val) {

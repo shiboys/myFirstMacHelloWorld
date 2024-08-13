@@ -19,11 +19,13 @@ public class MCSLock implements Lock {
   @Override
   public void lock() {
     Node currentNode = threadLocalCurrNode.get();
+    // 这里的 tail 只有一个指针，没有 head 对应
     Node prevNode = tail.getAndSet(currentNode);
     if (prevNode != null) {
       currentNode.status = true;
       prevNode.next = currentNode;
     }
+    // cpu 空跑，模拟阻塞，重要的一点在于，这个自旋是在当前的 node 节点上自旋
     while (currentNode.status) ;
   }
 
@@ -39,7 +41,7 @@ public class MCSLock implements Lock {
       if (!tail.compareAndSet(currentNode, null)) {
         // 如果使用 CAS 将 tail 节点改为 null 失败，则说明多线程，比如线程 B，更改了尾结点指针，也就是执行了 22 行的代码
         // 这里等待其他线程 B 执行25 行的代码
-        while (currentNode.next == null) ;
+        while (currentNode.next == null) ; // 仍然是当前 node 节点上自旋
       }
     }
     threadLocalCurrNode.remove();

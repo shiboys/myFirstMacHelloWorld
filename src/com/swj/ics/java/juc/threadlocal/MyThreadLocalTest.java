@@ -1,4 +1,4 @@
-package com.swj.ics.java.juc;
+package com.swj.ics.java.juc.threadlocal;
 
 /**
  * @author shiweijie

@@ -24,6 +24,7 @@ public class RedBlackTree3<K extends Comparable<K>, V> {
 
     public K key;
     public V val;
+    // JDK HashMap 中的红黑树是在调用 balanceInsertion 的时候，将节点的颜色改为红色的 x.red = true;
     public Color color = Color.RED;
 
     public Node(K k, V v) {
@@ -68,9 +69,10 @@ public class RedBlackTree3<K extends Comparable<K>, V> {
         p = p.right;
       }
     }
-    // 到这里，p 节点即使被插入的节点
+    // 到这里，p 节点既是被插入的节点
     p = new Node<>(k, val);
     p.parent = parent;
+    // 其实这里 cmp 可以重用(ps, 我看 jdk 的 hashmap 都重用了，我这里肯定也能重用)
     cmp = parent.key.compareTo(k);
     if (cmp > 0) {
       parent.left = p;
@@ -89,11 +91,11 @@ public class RedBlackTree3<K extends Comparable<K>, V> {
      *  维护树的平衡，需要做到一下 4 点：
      * 1、如果当前节点的父节点是黑色的，则已经是平衡的了。
      * 2、如果当前节点的父节点是红色的，要分 2 种情况套路
-     * 3、情况一：如果叔父节点也是红色的，则将父节点和叔父节点都变成黑色，祖父节点为红色，再以祖父节点为起点，递归着色。
+     * 3、情况一：如果叔父节点也是红色的，则将父节点和叔父节点都变成黑色，祖父节点为红色，再以祖父节点为起点，向上递归着色。
      * 4、情况二：如果叔父节点是黑色的，则当前节点和父节点都是红色的，则要需要分情况
      *  4.1 如果是 RR 情况，也就是父节点是祖父节点的右子节点，当前节点是父节点的右子节点，则以父节点为旋转点进行左旋，并重新着色，着色的规则是父节点变成黑色，祖父节点变成红色
      *  4.2 如果是 RL 情况，则需要先进行右旋，变成 RR， 再对 RR 进行左旋，并重新着色
-     *  4.3 同理，如果是 LL 情况，则进行右旋，并重新着色
+     *  4.3 同理，如果是 LL 情况，则进行右旋，并重新着色，再以祖父节点为轴心进行递归
      *  4.4 如果是 LR，则先进行左旋变成 LL，然后进行右旋，并重新着色
      */
     // 根节点始终为黑色
@@ -113,7 +115,8 @@ public class RedBlackTree3<K extends Comparable<K>, V> {
         uncle = gp.left;
       }
     }
-    // 父节点和叔父节点都是红色的
+    // 父节点和叔父节点都是红色的，
+    // gp 肯定不为 null 的原因是 root 节点为 黑色，两个子节点可以为红色，就被前面的 return 给拦截了
     if (uncle != null && uncle.color == Color.RED) {
       parent.color = Color.BLACK;
       uncle.color = Color.BLACK;
@@ -126,7 +129,7 @@ public class RedBlackTree3<K extends Comparable<K>, V> {
           rotateRight(gp);
           // 旋转之后重新着色,此时的 parent 节点也就是下图中旋转后的 l 节点变为黑色
           parent.color = Color.BLACK;
-          gp.color = Color.RED;// gp 节点也就是图中的p节点变成红色
+          gp.color = Color.RED;// gp 节点也就是图中的p节点变成红色。满足 父节点是黑色，子节点是红色的平衡关系, parent 是新的父节点，gp 变成子节点
         } else { // lr 形状，则先以 parent 为起始点进行左旋，变成 ll ，然后在 递归调用进行右旋并重新着色
           rotateLeft(parent);
           // 左旋之后，变成 ll, 以 parent 节点为参数，重新进行旋转，此时 parent 节点可以被认为是新插入的 newNode 节点
@@ -199,9 +202,9 @@ public class RedBlackTree3<K extends Comparable<K>, V> {
    * ll  lr             lr  r
    *
    * @param pNode 右旋 3 大步：
-   *              1、p.left = lr; if(lr != null) lr.right = p;
+   *              1、p.left = lr; if(lr != null) lr.parent = p;
    *              2、 l.right = p ; p.parent =l
-   *              3、 if(p == gp.left) gp.left = l  else gp.right = l; l.parent = gp;
+   *              3、 l.parent = gp; if(p == gp.left) gp.left = l  else gp.right = l;
    */
   private void rotateRight(Node<K, V> pNode) {
     Node<K, V> l = pNode.left;

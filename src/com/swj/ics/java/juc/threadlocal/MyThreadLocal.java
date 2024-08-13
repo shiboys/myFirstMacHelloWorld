@@ -1,4 +1,4 @@
-package com.swj.ics.java.juc;
+package com.swj.ics.java.juc.threadlocal;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicInteger;

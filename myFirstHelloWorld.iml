@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="Python" name="Python">
+      <configuration sdkName="Python 3.8" />
+    </facet>
+  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
@@ -87,5 +92,6 @@
     <orderEntry type="library" name="Maven: org.jodd:jodd-core:5.1.6" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba:transmittable-thread-local:2.13.0" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.12" level="project" />
+    <orderEntry type="library" name="Python 3.8 interpreter library" level="application" />
   </component>
 </module>

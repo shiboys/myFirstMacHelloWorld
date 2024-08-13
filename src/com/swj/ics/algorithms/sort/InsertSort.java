@@ -6,7 +6,7 @@ package com.swj.ics.algorithms.sort;
  * 那么把Di按照大小关系升序或者降序插入到已排序的数列之中，以此完成插入的方法就是插入排序
  * 插入排序的算法核心就是不断的处把数据插入到已经排序的数据列中的恰当位置。
  * 排序过程中的数组分成 已排序(前半部分)和待排序。在开始之前，已排序的只包括数组的起始元素，
- * 而待排序的包括第2个已经其以后的所有元素
+ * 而待排序的包括第2个以及其以后的所有元素
  * 
  */
 public class InsertSort {
@@ -31,7 +31,7 @@ public class InsertSort {
     }
     /**
      * 
-     * @param arr 当前数组，可能以部分排序，可能还没排序
+     * @param arr 当前数组，可能已部分排序，可能还没排序
      * @param i 需要被排序的位置，待排序的元素是从原始数组的第二个开始，所以这里的i应该是>=1的
      */
     static void insertToRightPosition(int[] arr,int i) {

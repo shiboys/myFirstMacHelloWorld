@@ -39,17 +39,17 @@
 
 算出所有的待加入的数据结构的节点名称的 Hash 值放入一个数组中，然后使用排序算法将其从小到大进行排序，最后将排序后的数据放入 list 中。之后，待路由的节点，只需要在 List 中找到第一个 Hash 值比它大的服务器节点就可以了。比如服务器节点的 hash 值为 [0,2,4,6,8,10]，待路由的节点是 7，则只要找到第一个比 7 大的整数，也就是8，就是我们要找到的需要路由过去的服务器节点。
 
-直接使用 Arrays#sort() 时间复杂度为 O(nLogn) ，则宗的事件复杂度为：
+直接使用 Arrays#sort() 时间复杂度为 O(nLogn) ，则总的事件复杂度为：
 1. 最好的情况，一次查找O(1) + O(NLogN)
 2. 最坏的情况，最后一次找到 O(n) + O(nlogN)
-
+(这里有问题呀，如果是排好序的，可以用二分法去查找比 x 大的第一个数(使用最右侧法则，很容易弄找到)，)
 则总的时间复杂度为 O(nLogn)
 
 ### 遍历 + List
 由于排序比较消耗性能，那么可以选择不排序，直接遍历的方式：
 
-    1. 服务器节点福排序，其 hash 全部放到一个 list 中
-    2. 等待路由的节点，算出其 Hash 值，由于指明了顺时针，云次遍历 List，比待路由节点 Hash 值大的算出差值并记录，比待路由节点的 Hash 值小的则忽略
+    1. 服务器节点不排序，其 hash 全部放到一个 list 中
+    2. 等待路由的节点，算出其 Hash 值，由于指明了顺时针，依次遍历 List，比待路由节点 Hash 值大的算出差值并记录，比待路由节点的 Hash 值小的则忽略
     3. 算出所有的差值后，最小的那个，就是最终要路由过去的节点
 
 现在选下此种方法的时间复杂度
@@ -61,7 +61,7 @@
 1. 红黑树的主要作用是用于存储有序的数据，因此相当于省略了排序这一步，效率很高
 2. JDK 里面提供了红黑树的实现：TreeMap 和 TreeSet 
 3. 红黑树提供了一个方法 ceilingEntry(Integer key) 可以直接获取 key 右边的第一个节点，如果节点为空，则表示已经到达尾部，则直接取树的第一个节点
-事件复杂度分析: O(logN)
+时间复杂度分析: O(logN)
 
 Hash 重写
 --------
@@ -137,7 +137,8 @@ The FNV_prime is dependent on n, the size of the hash
 hash_bits = insert_the_hash_size_in_bits_here;
 FNV_prime = insert_the_FNV_prime_here;
 offset_basis = 0;
-offset_str = "chongo <Landon Curt Noll> /\\../\\";
+offset_str = "chongo <Landon Curt Noll> /\../\";
+
 hash_mod = 2^hash_bits;
 
 str_len = strlen(offset_str);

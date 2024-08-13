@@ -51,22 +51,29 @@ public class TimerTaskList implements Delayed {
    * @param entry
    */
   public synchronized void remove(TimerTaskEntry entry) {
-    TimerTaskEntry prev = entry.prev;
-    TimerTaskEntry next = entry.next;
-    if (prev != null) {
-      prev.next = next;
-    }
-    if (next != null) {
-      next.prev = prev;
+    synchronized (entry) {// 只能单线程操作这个方法，且单线程操作当前节点
+      // 只有属于当前链表的节点，才能被当前链表删除
+      if(entry.taskList == this) {
+        TimerTaskEntry prev = entry.prev;
+        TimerTaskEntry next = entry.next;
+        if (prev != null) {
+          prev.next = next;
+        }
+        if (next != null) {
+          next.prev = prev;
+        }
+
+        entry.prev = null;
+        entry.next = null;
+        // 取消 taskList 属性, 跟设置此属性保持一致，成闭环
+        entry.taskList = null;
+
+        // 减少计数器
+        taskCounter.decrementAndGet();
+      }
+
     }
 
-    entry.prev = null;
-    entry.next = null;
-    // 取消 taskList 属性, 跟设置此属性保持一致，成闭环
-    entry.taskList = null;
-
-    // 减少计数器
-    taskCounter.decrementAndGet();
   }
 
   public synchronized void add(TimerTaskEntry entry) {

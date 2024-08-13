@@ -89,7 +89,7 @@ public class SeparateChainHashTable<Key, Value> {
 
   public void delete(Key key) {
     if (key == null) {
-      throw new IllegalArgumentException("the key o f hash table item to be deleted can not be null");
+      throw new IllegalArgumentException("the key of hash table item to be deleted can not be null");
     }
     SequentialSearchNode<Key, Value> node = array[hash(key)];
     if (node == null) {
@@ -102,7 +102,7 @@ public class SeparateChainHashTable<Key, Value> {
     node.delete(key);
 
     // resize
-    if (size > DEFAULT_INIT_CAPACITY && size <= length / 2) {
+    if (size > DEFAULT_INIT_CAPACITY && size == length / 4) {
       resize(length / 2);
     }
   }
@@ -111,6 +111,7 @@ public class SeparateChainHashTable<Key, Value> {
     if (key == null) {
       throw new IllegalArgumentException("key can not be null while put key-value to hashtable.");
     }
+    // 这个有点扯
     if (val == null) {
       delete(key);
       return;
@@ -121,9 +122,8 @@ public class SeparateChainHashTable<Key, Value> {
       node = new SequentialSearchNode<>();
       array[index] = node;
     }
-    // todo：resize
     // 如果hash 表底层的链表平均长度 大于等于 10 ，则 hash 表需要扩容值 2 倍。
-    if (size >= length * 10) {
+    if (size >= length * 10) { // 相当于 jdk HashMap 负载因子为 10
       resize(2 * length);
     }
     if (!node.containsKey(key)) {
@@ -132,7 +132,7 @@ public class SeparateChainHashTable<Key, Value> {
     node.put(key, val);
   }
 
-  public void resize(int newLength) {
+  private void resize(int newLength) {
     // 这里的 resize 并没有参照 jdk 的操作，使用 Arrays.copy, 而是使用直接创建新的，让旧的进行垃圾回收
     SeparateChainHashTable<Key, Value> tempTable = new SeparateChainHashTable<>(newLength);
     for (int i = 0; i < length; i++) {
@@ -143,6 +143,7 @@ public class SeparateChainHashTable<Key, Value> {
         }
       }
     }
+    // 这样扩容效率堪忧呀，jdk 是直接在数组上操作，有一半左右的元素仍然是留在原数组
     this.length = tempTable.length;
     this.size = tempTable.size;
     this.array = tempTable.array;

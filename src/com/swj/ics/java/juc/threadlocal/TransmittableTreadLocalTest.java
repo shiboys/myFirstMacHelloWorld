@@ -1,4 +1,4 @@
-package com.swj.ics.java.juc;
+package com.swj.ics.java.juc.threadlocal;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
 import com.alibaba.ttl.TtlRunnable;
