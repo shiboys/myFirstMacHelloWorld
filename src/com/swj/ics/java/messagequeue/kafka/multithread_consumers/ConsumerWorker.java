@@ -45,6 +45,7 @@ public class ConsumerWorker {
     if (stopped)
       return false;
 
+    // 会存在多线程运行同一个 ConsumerWorker ?
     lock.lock();
     started = true;
     lock.unlock();
@@ -67,7 +68,7 @@ public class ConsumerWorker {
   }
 
   /**
-   * 模拟 10 秒左右处理一条消息。
+   * 模拟 10 毫秒左右处理一条消息。
    *
    * @param record
    */

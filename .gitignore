@@ -34,3 +34,9 @@ hs_err_pid*
 /src/com/swj/ics/dataStructure/hash/jieba/
 target/
 /target/
+!/.idea/misc.xml
+
+!/.idea/encodings.xml
+
+!/.idea/compiler.xml
+!/myFirstHelloWorld.iml

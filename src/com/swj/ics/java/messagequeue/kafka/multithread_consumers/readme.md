@@ -1,6 +1,6 @@
 ## Kafka 多线程 Consumer
 
-该版本的 Kafak 多线程 Consumer，我认为是位数不多的精品多线程消费者，参考自 Apache Kafka Commiter 胡夕的博客，地址为
+该版本的 Kafak 多线程 Consumer，我认为是为数不多的精品多线程消费者，参考自 Apache Kafka Commiter 胡夕的博客，地址为
 https://www.cnblogs.com/huxi2b/p/13668061.html
 使用了很多 java 和 kafka 的异步编程技术，实现多线程地消费，即高性能，也线程安全，更是具有非常高的弹性消费能力。
 使用到的技术主要有：
