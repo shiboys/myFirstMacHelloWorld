@@ -20,8 +20,5 @@
         <module name="myFirstHelloWorld" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="myFirstHelloWorld" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
